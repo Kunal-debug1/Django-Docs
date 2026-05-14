@@ -1,0 +1,2134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DjangoDocs — Complete Beginner to Advanced Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+/* ===================== RESET & ROOT ===================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --dj: #0C6B3E;
+  --dj2: #14a862;
+  --dj-bg: #e8f5ee;
+  --dj-glow: rgba(20,168,98,0.15);
+  --bg: #0d0f0e;
+  --bg2: #141714;
+  --bg3: #1a1e1a;
+  --bg4: #202420;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #e8ede9;
+  --text2: #9aaa9c;
+  --text3: #5c6b5e;
+  --accent: #14a862;
+  --accent2: #0d7a47;
+  --warn: #c8852a;
+  --warn-bg: rgba(200,133,42,0.12);
+  --info: #3a8fd4;
+  --info-bg: rgba(58,143,212,0.12);
+  --danger: #c84040;
+  --danger-bg: rgba(200,64,64,0.1);
+  --tip-bg: rgba(20,168,98,0.1);
+  --font-head: 'Syne', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+  --font-body: 'Lora', serif;
+  --sidebar-w: 260px;
+  --topbar-h: 56px;
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ===================== SCROLLBAR ===================== */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg2); }
+::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* ===================== TOPBAR ===================== */
+#topbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: var(--topbar-h);
+  background: rgba(13,15,14,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 16px;
+  padding: 0 20px;
+}
+.logo-wrap { display: flex; align-items: center; gap: 10px; width: var(--sidebar-w); }
+.logo-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: linear-gradient(135deg, var(--dj), #0a4f2d);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 800; color: #fff; font-family: var(--font-head);
+  flex-shrink: 0;
+}
+.logo-text { font-family: var(--font-head); font-size: 17px; font-weight: 700; color: var(--text); }
+.logo-ver { font-family: var(--font-mono); font-size: 10px; color: var(--accent); background: var(--tip-bg); padding: 2px 6px; border-radius: 4px; margin-left: 4px; }
+#topbar-search {
+  flex: 1; max-width: 380px;
+  background: var(--bg3); border: 1px solid var(--border2);
+  border-radius: 8px; padding: 7px 14px;
+  font-family: var(--font-mono); font-size: 12px; color: var(--text);
+  outline: none; transition: border-color .2s;
+}
+#topbar-search:focus { border-color: var(--accent); }
+#topbar-search::placeholder { color: var(--text3); }
+.topbar-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.top-btn {
+  padding: 6px 14px; border-radius: 6px; font-size: 12px; cursor: pointer;
+  font-family: var(--font-head); font-weight: 600; transition: all .2s;
+  border: 1px solid var(--border2); background: transparent; color: var(--text2);
+}
+.top-btn:hover { background: var(--bg3); color: var(--text); }
+.top-btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.top-btn.primary:hover { background: var(--dj); }
+#menu-toggle { display: none; background: none; border: none; color: var(--text2); cursor: pointer; font-size: 22px; padding: 4px; }
+
+/* ===================== LAYOUT ===================== */
+#layout {
+  display: flex;
+  padding-top: var(--topbar-h);
+  min-height: 100vh;
+}
+
+/* ===================== SIDEBAR ===================== */
+#sidebar {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  position: fixed;
+  top: var(--topbar-h);
+  bottom: 0;
+  left: 0;
+  overflow-y: auto;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 20px 0 40px;
+  transition: transform .3s;
+  z-index: 90;
+}
+.nav-section { margin-bottom: 8px; }
+.nav-section-label {
+  font-family: var(--font-mono); font-size: 9px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: .12em;
+  color: var(--text3); padding: 12px 20px 6px;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 20px; cursor: pointer; transition: all .15s;
+  color: var(--text2); font-family: var(--font-head); font-size: 13px; font-weight: 400;
+  border-left: 2px solid transparent; position: relative;
+}
+.nav-item:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+.nav-item.active { color: var(--accent); border-left-color: var(--accent); background: var(--tip-bg); font-weight: 600; }
+.nav-num {
+  font-family: var(--font-mono); font-size: 9px; color: var(--text3);
+  min-width: 18px; background: var(--bg4); padding: 1px 4px; border-radius: 3px; text-align: center;
+}
+.nav-item.active .nav-num { background: var(--dj-glow); color: var(--accent); }
+.nav-progress {
+  height: 2px; background: var(--bg4); margin: 4px 20px 0;
+}
+.nav-progress-fill { height: 100%; background: var(--accent); transition: width .3s; width: 0%; }
+
+/* ===================== MAIN CONTENT ===================== */
+#main {
+  flex: 1;
+  margin-left: var(--sidebar-w);
+  min-width: 0;
+}
+.page { display: none; }
+.page.active { display: block; animation: fadein .25s ease; }
+@keyframes fadein { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+.page-header {
+  padding: 48px 56px 32px;
+  border-bottom: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+.page-header::before {
+  content: '';
+  position: absolute; top: -60px; right: -60px;
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, var(--dj-glow) 0%, transparent 70%);
+  pointer-events: none;
+}
+.chapter-tag {
+  font-family: var(--font-mono); font-size: 10px; font-weight: 500;
+  color: var(--accent); background: var(--tip-bg);
+  padding: 4px 10px; border-radius: 20px; display: inline-block; margin-bottom: 12px;
+  border: 1px solid rgba(20,168,98,0.25);
+}
+.page-header h1 {
+  font-family: var(--font-head); font-size: 36px; font-weight: 800;
+  color: var(--text); line-height: 1.1; margin-bottom: 12px;
+}
+.page-header .subtitle {
+  font-size: 15px; color: var(--text2); max-width: 600px; line-height: 1.7;
+  font-style: italic;
+}
+.page-body { padding: 40px 56px 60px; max-width: 900px; }
+
+/* ===================== TYPOGRAPHY ===================== */
+h2 {
+  font-family: var(--font-head); font-size: 22px; font-weight: 700;
+  color: var(--text); margin: 2.5rem 0 .75rem; padding-bottom: .4rem;
+  border-bottom: 1px solid var(--border);
+}
+h3 {
+  font-family: var(--font-head); font-size: 15px; font-weight: 600;
+  color: var(--text2); margin: 1.5rem 0 .5rem; text-transform: uppercase;
+  letter-spacing: .06em;
+}
+p {
+  font-size: 15px; line-height: 1.85; color: var(--text2); margin-bottom: 1rem;
+}
+strong { color: var(--text); font-weight: 600; }
+em { color: var(--text2); }
+
+/* ===================== CODE ===================== */
+pre {
+  background: var(--bg2); border: 1px solid var(--border2);
+  border-radius: 10px; overflow-x: auto; margin: 1rem 0;
+  position: relative;
+}
+.code-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 16px; border-bottom: 1px solid var(--border);
+  background: var(--bg3); border-radius: 10px 10px 0 0;
+}
+.code-lang {
+  font-family: var(--font-mono); font-size: 10px; color: var(--accent);
+  text-transform: uppercase; letter-spacing: .08em;
+}
+.code-dots { display: flex; gap: 5px; }
+.code-dots span { width: 10px; height: 10px; border-radius: 50%; }
+.code-dots span:nth-child(1) { background: #ff5f57; }
+.code-dots span:nth-child(2) { background: #febc2e; }
+.code-dots span:nth-child(3) { background: #28c840; }
+.copy-btn {
+  font-family: var(--font-mono); font-size: 10px; color: var(--text3);
+  background: none; border: 1px solid var(--border); padding: 3px 8px;
+  border-radius: 4px; cursor: pointer; transition: all .2s;
+}
+.copy-btn:hover { color: var(--text); border-color: var(--border2); }
+.copy-btn.copied { color: var(--accent); border-color: var(--accent); }
+pre code {
+  display: block; padding: 16px 20px;
+  font-family: var(--font-mono); font-size: 13px; line-height: 1.7;
+  color: #d4d4d4;
+}
+.ic { font-family: var(--font-mono); font-size: 12px; background: var(--bg3); color: var(--accent2); padding: 1px 6px; border-radius: 4px; border: 1px solid var(--border); }
+
+/* Syntax colors */
+.kw  { color: #569cd6; }
+.str { color: #ce9178; }
+.cm  { color: #6a9955; font-style: italic; }
+.fn  { color: #dcdcaa; }
+.cls { color: #4ec9b0; }
+.num { color: #b5cea8; }
+.dec { color: #c586c0; }
+
+/* ===================== ALERTS ===================== */
+.alert {
+  display: flex; gap: 12px; padding: 12px 16px;
+  border-radius: 8px; margin: 1rem 0; font-size: 14px; line-height: 1.65;
+  align-items: flex-start;
+}
+.alert-icon { font-size: 16px; margin-top: 1px; flex-shrink: 0; }
+.alert-tip  { background: var(--tip-bg);   color: #7dcf9e; border: 1px solid rgba(20,168,98,0.2); }
+.alert-warn { background: var(--warn-bg);  color: #e0a857; border: 1px solid rgba(200,133,42,0.25); }
+.alert-info { background: var(--info-bg);  color: #6aaee0; border: 1px solid rgba(58,143,212,0.25); }
+.alert-danger { background: var(--danger-bg); color: #e06060; border: 1px solid rgba(200,64,64,0.25); }
+.alert strong { color: inherit; }
+
+/* ===================== CARDS ===================== */
+.card-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+  gap: 14px; margin: 1.25rem 0;
+}
+.card {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 12px; padding: 18px;
+  transition: border-color .2s, transform .2s, background .2s;
+}
+.card:hover { border-color: var(--border2); transform: translateY(-2px); background: var(--bg4); }
+.card.clickable { cursor: pointer; }
+.card.clickable:hover { border-color: var(--accent); }
+.card-icon { font-size: 22px; margin-bottom: 10px; }
+.card-title { font-family: var(--font-head); font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+.card-desc { font-size: 12px; color: var(--text2); line-height: 1.6; font-family: var(--font-mono); }
+
+/* ===================== TABLE ===================== */
+.table-wrap { overflow-x: auto; margin: 1rem 0; border-radius: 10px; border: 1px solid var(--border); }
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+thead { background: var(--bg3); }
+th { padding: 10px 14px; text-align: left; font-family: var(--font-head); font-weight: 600; font-size: 12px; color: var(--text2); text-transform: uppercase; letter-spacing: .06em; border-bottom: 1px solid var(--border2); }
+td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text2); font-size: 13.5px; line-height: 1.6; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(255,255,255,0.02); }
+
+/* ===================== STEPS ===================== */
+.step { display: flex; gap: 16px; margin: 1rem 0; }
+.step-num {
+  flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+  background: var(--accent); color: #fff; font-family: var(--font-head);
+  font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+  margin-top: 2px; box-shadow: 0 0 12px var(--dj-glow);
+}
+.step-body { flex: 1; }
+.step-title { font-family: var(--font-head); font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+.step-desc { font-size: 14px; color: var(--text2); line-height: 1.7; }
+
+/* ===================== TAGS ===================== */
+.tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin: .75rem 0; }
+.tag { font-family: var(--font-mono); font-size: 11px; padding: 4px 10px; border-radius: 20px; background: var(--bg3); border: 1px solid var(--border2); color: var(--text2); }
+
+/* ===================== MVT DIAGRAM ===================== */
+.mvt {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 4px;
+  margin: 1.25rem 0; background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 12px; padding: 20px;
+}
+.mvt-box {
+  flex: 1; min-width: 90px; padding: 14px 10px; border-radius: 8px; text-align: center;
+}
+.mvt-label { font-family: var(--font-head); font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+.mvt-sub { font-family: var(--font-mono); font-size: 10px; opacity: .75; }
+.mvt-arrow { color: var(--text3); font-size: 20px; padding: 0 2px; }
+.mvt-b { background: rgba(58,143,212,0.15); color: #6aaee0; }
+.mvt-u { background: rgba(255,255,255,0.05); color: var(--text2); }
+.mvt-v { background: rgba(20,168,98,0.12); color: #7dcf9e; }
+.mvt-m { background: rgba(200,133,42,0.12); color: #e0a857; }
+.mvt-t { background: rgba(180,80,200,0.12); color: #c584e0; }
+
+/* ===================== NAVIGATION FOOTER ===================== */
+.page-nav {
+  display: flex; gap: 12px; padding: 24px 56px 40px; border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.nav-btn {
+  display: flex; align-items: center; gap: 8px; padding: 10px 20px;
+  border-radius: 8px; font-family: var(--font-head); font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all .2s; border: 1px solid var(--border2);
+  background: var(--bg3); color: var(--text2);
+}
+.nav-btn:hover { background: var(--bg4); color: var(--text); border-color: var(--border2); }
+.nav-btn.next { background: var(--accent); color: #fff; border-color: var(--accent); }
+.nav-btn.next:hover { background: var(--dj); }
+
+/* ===================== HERO (page 0) ===================== */
+.hero {
+  padding: 60px 56px 40px;
+  background: linear-gradient(160deg, var(--bg2) 0%, var(--bg) 60%);
+  position: relative; overflow: hidden;
+}
+.hero::after {
+  content: 'Django';
+  position: absolute; right: -20px; top: 50%; transform: translateY(-50%);
+  font-family: var(--font-head); font-size: 180px; font-weight: 800;
+  color: rgba(255,255,255,0.02); pointer-events: none; user-select: none;
+  white-space: nowrap;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono); font-size: 11px; color: var(--accent);
+  background: var(--tip-bg); padding: 5px 12px; border-radius: 20px;
+  border: 1px solid rgba(20,168,98,0.25); margin-bottom: 20px;
+}
+.hero h1 {
+  font-family: var(--font-head); font-size: 52px; font-weight: 800; line-height: 1.05;
+  color: var(--text); margin-bottom: 16px;
+}
+.hero h1 span { color: var(--accent); }
+.hero-sub { font-size: 16px; color: var(--text2); max-width: 520px; line-height: 1.75; margin-bottom: 32px; }
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.hero-btn {
+  padding: 12px 28px; border-radius: 8px; font-family: var(--font-head); font-weight: 700; font-size: 14px;
+  cursor: pointer; transition: all .2s; border: none;
+}
+.hero-btn.primary { background: var(--accent); color: #fff; }
+.hero-btn.primary:hover { background: var(--dj); transform: translateY(-1px); }
+.hero-btn.secondary { background: var(--bg3); color: var(--text2); border: 1px solid var(--border2); }
+.hero-btn.secondary:hover { background: var(--bg4); color: var(--text); }
+.hero-stats { display: flex; gap: 32px; margin-top: 40px; padding-top: 32px; border-top: 1px solid var(--border); flex-wrap: wrap; }
+.hero-stat-num { font-family: var(--font-head); font-size: 28px; font-weight: 800; color: var(--accent); }
+.hero-stat-label { font-family: var(--font-mono); font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+/* ===================== PROJECTS ===================== */
+.project-card {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 12px; padding: 20px; cursor: pointer; transition: all .2s;
+  display: flex; gap: 16px; margin-bottom: 12px;
+}
+.project-card:hover { border-color: var(--accent); background: var(--bg4); transform: translateX(4px); }
+.project-icon { font-size: 28px; flex-shrink: 0; }
+.project-level {
+  font-family: var(--font-mono); font-size: 9px; text-transform: uppercase;
+  padding: 2px 6px; border-radius: 3px; margin-bottom: 6px; display: inline-block;
+}
+.level-bg { background: rgba(20,168,98,0.15); color: var(--accent); }
+.level-mid { background: rgba(200,133,42,0.15); color: var(--warn); }
+.level-adv { background: rgba(200,64,64,0.12); color: var(--danger); }
+.project-title { font-family: var(--font-head); font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.project-desc { font-size: 13px; color: var(--text2); line-height: 1.6; }
+.project-tags { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+.project-tag { font-family: var(--font-mono); font-size: 10px; padding: 2px 7px; border-radius: 3px; background: var(--bg); color: var(--text3); border: 1px solid var(--border); }
+
+/* ===================== INTERVIEW Q&A ===================== */
+.qa-item {
+  border: 1px solid var(--border); border-radius: 10px; margin-bottom: 10px; overflow: hidden;
+}
+.qa-q {
+  padding: 14px 18px; cursor: pointer; font-family: var(--font-head); font-size: 14px; font-weight: 600;
+  color: var(--text); background: var(--bg3); display: flex; align-items: center; justify-content: space-between;
+  transition: background .15s;
+}
+.qa-q:hover { background: var(--bg4); }
+.qa-q .arrow { transition: transform .2s; color: var(--text3); }
+.qa-item.open .qa-q .arrow { transform: rotate(90deg); color: var(--accent); }
+.qa-a {
+  padding: 0 18px; max-height: 0; overflow: hidden;
+  transition: max-height .3s ease, padding .3s;
+  font-size: 14px; color: var(--text2); line-height: 1.75;
+  border-top: 0px solid var(--border);
+}
+.qa-item.open .qa-a { max-height: 600px; padding: 14px 18px; border-top-width: 1px; }
+
+/* ===================== SEARCH OVERLAY ===================== */
+#search-overlay {
+  display: none; position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+  align-items: flex-start; justify-content: center; padding-top: 80px;
+}
+#search-overlay.open { display: flex; }
+#search-box {
+  width: 560px; max-width: 90vw;
+  background: var(--bg2); border: 1px solid var(--border2); border-radius: 12px; overflow: hidden;
+}
+#search-input {
+  width: 100%; padding: 16px 20px; background: none; border: none;
+  font-family: var(--font-mono); font-size: 14px; color: var(--text); outline: none;
+  border-bottom: 1px solid var(--border);
+}
+#search-results { padding: 8px 0; max-height: 320px; overflow-y: auto; }
+.search-result {
+  padding: 10px 20px; cursor: pointer; display: flex; gap: 10px; align-items: center;
+  font-size: 13px; transition: background .1s;
+}
+.search-result:hover { background: var(--bg3); }
+.search-result-ch { font-family: var(--font-mono); font-size: 10px; color: var(--accent); min-width: 28px; }
+.search-result-title { color: var(--text); font-family: var(--font-head); font-weight: 600; }
+.search-result-desc { color: var(--text3); font-size: 11px; }
+#search-hint { padding: 8px 20px 12px; font-family: var(--font-mono); font-size: 10px; color: var(--text3); border-top: 1px solid var(--border); }
+
+/* ===================== PROGRESS BAR ===================== */
+#progress-bar {
+  position: fixed; top: var(--topbar-h); left: 0; right: 0; height: 2px;
+  background: var(--border); z-index: 99;
+}
+#progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width .3s; }
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 780px) {
+  :root { --sidebar-w: 0px; }
+  #sidebar { transform: translateX(-260px); width: 260px; }
+  #sidebar.open { transform: translateX(0); }
+  #main { margin-left: 0; }
+  #menu-toggle { display: block; }
+  .page-header, .page-body, .hero { padding-left: 20px; padding-right: 20px; }
+  .page-nav { padding-left: 20px; padding-right: 20px; }
+  .hero h1 { font-size: 32px; }
+  .hero::after { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- SEARCH OVERLAY -->
+<div id="search-overlay" onclick="closeSearch(event)">
+  <div id="search-box">
+    <input id="search-input" placeholder="Search chapters, topics, keywords..." autocomplete="off" oninput="doSearch(this.value)" onkeydown="searchKey(event)">
+    <div id="search-results"></div>
+    <div id="search-hint">↑↓ navigate &nbsp;·&nbsp; Enter to open &nbsp;·&nbsp; Esc to close</div>
+  </div>
+</div>
+
+<!-- PROGRESS BAR -->
+<div id="progress-bar"><div id="progress-fill"></div></div>
+
+<!-- TOPBAR -->
+<header id="topbar">
+  <button id="menu-toggle" onclick="toggleSidebar()">☰</button>
+  <div class="logo-wrap">
+    <div class="logo-icon">Dj</div>
+    <span class="logo-text">DjangoDocs</span>
+    <span class="logo-ver">v5.x</span>
+  </div>
+  <input id="topbar-search" placeholder="⌘K  Search docs..." readonly onclick="openSearch()" style="cursor:pointer">
+  <div class="topbar-right">
+    <button class="top-btn" onclick="openSearch()">Search</button>
+    <button class="top-btn primary" onclick="showPage(12)">🚀 Projects</button>
+  </div>
+</header>
+
+<!-- LAYOUT -->
+<div id="layout">
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div id="nav-progress-wrap" style="padding:12px 20px 4px">
+    <div style="font-family:var(--font-mono);font-size:9px;color:var(--text3);margin-bottom:4px">PROGRESS</div>
+    <div class="nav-progress"><div class="nav-progress-fill" id="main-progress"></div></div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-label">Getting Started</div>
+    <div class="nav-item active" onclick="showPage(0)"><span class="nav-num">00</span> Welcome</div>
+    <div class="nav-item" onclick="showPage(1)"><span class="nav-num">01</span> Introduction</div>
+    <div class="nav-item" onclick="showPage(2)"><span class="nav-num">02</span> Environment Setup</div>
+    <div class="nav-item" onclick="showPage(3)"><span class="nav-num">03</span> Project Structure</div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-label">Core Concepts</div>
+    <div class="nav-item" onclick="showPage(4)"><span class="nav-num">04</span> URLs & Views</div>
+    <div class="nav-item" onclick="showPage(5)"><span class="nav-num">05</span> Models & ORM</div>
+    <div class="nav-item" onclick="showPage(6)"><span class="nav-num">06</span> Templates</div>
+    <div class="nav-item" onclick="showPage(7)"><span class="nav-num">07</span> Forms</div>
+    <div class="nav-item" onclick="showPage(8)"><span class="nav-num">08</span> Authentication</div>
+    <div class="nav-item" onclick="showPage(9)"><span class="nav-num">09</span> Admin Panel</div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-label">Advanced</div>
+    <div class="nav-item" onclick="showPage(10)"><span class="nav-num">10</span> REST Framework</div>
+    <div class="nav-item" onclick="showPage(11)"><span class="nav-num">11</span> Advanced Topics</div>
+    <div class="nav-item" onclick="showPage(12)"><span class="nav-num">12</span> Security</div>
+    <div class="nav-item" onclick="showPage(13)"><span class="nav-num">13</span> Deployment</div>
+    <div class="nav-item" onclick="showPage(14)"><span class="nav-num">14</span> Testing</div>
+    <div class="nav-item" onclick="showPage(15)"><span class="nav-num">15</span> Performance</div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-label">Practice</div>
+    <div class="nav-item" onclick="showPage(16)"><span class="nav-num">16</span> Real Projects</div>
+    <div class="nav-item" onclick="showPage(17)"><span class="nav-num">17</span> Interview Prep</div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main id="main">
+
+<!-- ===== PAGE 0: WELCOME ===== -->
+<div class="page active" id="page-0">
+  <div class="hero">
+    <div class="hero-badge">🐍 Open Source Documentation</div>
+    <h1>Learn <span>Django</span><br>The Right Way</h1>
+    <p class="hero-sub">A complete, beginner-friendly guide to Django — from "Hello World" to production-ready web apps. Practical, project-based, and always up-to-date.</p>
+    <div class="hero-actions">
+      <button class="hero-btn primary" onclick="showPage(1)">Start Learning →</button>
+      <button class="hero-btn secondary" onclick="showPage(16)">View Projects</button>
+    </div>
+    <div class="hero-stats">
+      <div><div class="hero-stat-num">17</div><div class="hero-stat-label">Chapters</div></div>
+      <div><div class="hero-stat-num">5</div><div class="hero-stat-label">Projects</div></div>
+      <div><div class="hero-stat-num">100+</div><div class="hero-stat-label">Code Examples</div></div>
+      <div><div class="hero-stat-num">Django 5.x</div><div class="hero-stat-label">Latest Version</div></div>
+    </div>
+  </div>
+  <div class="page-body">
+    <h2>What you'll learn</h2>
+    <div class="card-grid">
+      <div class="card"><div class="card-icon">🏗️</div><div class="card-title">Project Structure</div><div class="card-desc">Understand every file and folder in a Django project</div></div>
+      <div class="card"><div class="card-icon">🗄️</div><div class="card-title">Models & ORM</div><div class="card-desc">Work with databases using Python — no SQL needed</div></div>
+      <div class="card"><div class="card-icon">🔐</div><div class="card-title">Authentication</div><div class="card-desc">Login, logout, register, permissions, custom users</div></div>
+      <div class="card"><div class="card-icon">⚡</div><div class="card-title">REST APIs</div><div class="card-desc">Build JSON APIs with Django REST Framework & JWT</div></div>
+      <div class="card"><div class="card-icon">🛡️</div><div class="card-title">Security</div><div class="card-desc">CSRF, XSS, SQL injection — keep your app safe</div></div>
+      <div class="card"><div class="card-icon">🚀</div><div class="card-title">Deployment</div><div class="card-desc">Ship to Railway, Render, PythonAnywhere, or VPS</div></div>
+    </div>
+    <h2>Who is this for?</h2>
+    <p>This documentation is designed for <strong>students, self-learners, and developers</strong> who know basic Python and want to build real web applications. No prior web framework experience required.</p>
+    <div class="alert alert-info">
+      <span class="alert-icon">💡</span>
+      <span><strong>Prerequisite:</strong> Basic Python knowledge (variables, functions, classes, loops). If you're new to Python, spend a week on Python basics first, then come back here.</span>
+    </div>
+    <div class="alert alert-tip">
+      <span class="alert-icon">✅</span>
+      <span><strong>Tip:</strong> Use the search bar (top) or keyboard shortcut <strong>Ctrl+K</strong> to quickly jump to any topic.</span>
+    </div>
+  </div>
+  <div class="page-nav">
+    <button class="nav-btn next" onclick="showPage(1)">Start: Introduction →</button>
+  </div>
+</div>
+
+<!-- ===== PAGE 1: INTRODUCTION ===== -->
+<div class="page" id="page-1">
+  <div class="page-header">
+    <div class="chapter-tag">Chapter 01</div>
+    <h1>Introduction to Django</h1>
+    <p class="subtitle">Django is a high-level Python web framework that lets you build powerful, secure, and scalable web applications quickly — without reinventing the wheel.</p>
+  </div>
+  <div class="page-body">
+    <h2>What is Django?</h2>
+    <p>Django is a <strong>free, open-source web framework</strong> written in Python. It was created in 2005 by Adrian Holovaty and Simon Willison at a newspaper company in Kansas — that's why it focuses on <em>rapid development</em>.</p>
+    <p>Its motto: <strong>"The web framework for perfectionists with deadlines."</strong></p>
+
+    <h2>Why use Django?</h2>
+    <div class="card-grid">
+      <div class="card"><div class="card-icon">🔋</div><div class="card-title">Batteries included</div><div class="card-desc">Admin panel, ORM, auth, forms — all built in, zero setup</div></div>
+      <div class="card"><div class="card-icon">🛡️</div><div class="card-title">Secure by default</div><div class="card-desc">CSRF, XSS, SQL injection protection out of the box</div></div>
+      <div class="card"><div class="card-icon">⚡</div><div class="card-title">Rapid development</div><div class="card-desc">Go from idea to working prototype in hours, not days</div></div>
+      <div class="card"><div class="card-icon">📦</div><div class="card-title">DRY principle</div><div class="card-desc">Don't Repeat Yourself — Django encourages reusable code</div></div>
+      <div class="card"><div class="card-icon">🌍</div><div class="card-title">Scalable</div><div class="card-desc">Powers Instagram with 1 billion+ users</div></div>
+      <div class="card"><div class="card-icon">👥</div><div class="card-title">Huge community</div><div class="card-desc">Thousands of packages, tutorials, Stack Overflow answers</div></div>
+    </div>
+
+    <h2>Companies using Django</h2>
+    <div class="tag-list">
+      <span class="tag">Instagram</span><span class="tag">Pinterest</span><span class="tag">Disqus</span>
+      <span class="tag">Mozilla</span><span class="tag">Bitbucket</span><span class="tag">NASA</span>
+      <span class="tag">The Washington Post</span><span class="tag">Eventbrite</span><span class="tag">Dropbox</span>
+    </div>
+
+    <h2>MVT Architecture</h2>
+    <p>Django follows the <strong>Model–View–Template (MVT)</strong> pattern. Every request goes through this pipeline:</p>
+    <div class="mvt">
+      <div class="mvt-box mvt-b"><div class="mvt-label">Browser</div><div class="mvt-sub">HTTP Request</div></div>
+      <div class="mvt-arrow">→</div>
+      <div class="mvt-box mvt-u"><div class="mvt-label">urls.py</div><div class="mvt-sub">URL Router</div></div>
+      <div class="mvt-arrow">→</div>
+      <div class="mvt-box mvt-v"><div class="mvt-label">View</div><div class="mvt-sub">Business Logic</div></div>
+      <div class="mvt-arrow">⇄</div>
+      <div class="mvt-box mvt-m"><div class="mvt-label">Model</div><div class="mvt-sub">Database</div></div>
+      <div class="mvt-arrow">→</div>
+      <div class="mvt-box mvt-t"><div class="mvt-label">Template</div><div class="mvt-sub">HTML Output</div></div>
+      <div class="mvt-arrow">→</div>
+      <div class="mvt-box mvt-b"><div class="mvt-label">Browser</div><div class="mvt-sub">HTTP Response</div></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Component</th><th>MVC Equivalent</th><th>Responsibility</th></tr></thead>
+        <tbody>
+          <tr><td><span class="ic">Model</span></td><td>Model (M)</td><td>Data layer — defines database tables as Python classes</td></tr>
+          <tr><td><span class="ic">View</span></td><td>Controller (C)</td><td>Business logic — processes requests, returns responses</td></tr>
+          <tr><td><span class="ic">Template</span></td><td>View (V)</td><td>Presentation layer — renders HTML using dynamic data</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Django vs other frameworks</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Feature</th><th>Django</th><th>Flask</th><th>FastAPI</th></tr></thead>
+        <tbody>
+          <tr><td>Type</td><td>Full-stack</td><td>Micro</td><td>Async API</td></tr>
+          <tr><td>ORM built-in</td><td>✅ Yes</td><td>❌ No</td><td>❌ No</td></tr>
+          <tr><td>Admin panel</td><td>✅ Auto-generated</td><td>❌ No</td><td>❌ No</td></tr>
+          <tr><td>Best for</td><td>Full web apps</td><td>Simple APIs/apps</td><td>High-performance APIs</td></tr>
+          <tr><td>Learning curve</td><td>Medium</td><td>Low</td><td>Medium</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="page-nav">
+    <button class="nav-btn" onclick="showPage(0)">← Welcome</button>
+    <button class="nav-btn next" onclick="showPage(2)">Setup Environment →</button>
+  </div>
+</div>
+
+<!-- ===== PAGE 2: SETUP ===== -->
+<div class="page" id="page-2">
+  <div class="page-header">
+    <div class="chapter-tag">Chapter 02</div>
+    <h1>Environment Setup</h1>
+    <p class="subtitle">Set up a professional Django development environment from scratch. Follow each step carefully.</p>
+  </div>
+  <div class="page-body">
+    <h2>Step-by-step installation</h2>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Install Python 3.11+</div>
+        <div class="step-desc">Download from <a href="https://python.org" target="_blank">python.org</a>. On Windows, check <strong>"Add Python to PATH"</strong> during installation.</div>
+        <pre><div class="code-header"><span class="code-lang">bash</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code><span class="cm"># Verify Python is installed</span>
+python --version
+<span class="cm"># Output: Python 3.11.x or higher</span></code></pre>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Create a virtual environment</div>
+        <div class="step-desc">A virtual environment keeps your project dependencies isolated from other projects.</div>
+        <pre><div class="code-header"><span class="code-lang">bash</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code><span class="cm"># Create a virtual environment named "venv"</span>
+python -m venv venv
+
+<span class="cm"># Activate it — Windows</span>
+venv\Scripts\activate
+
+<span class="cm"># Activate it — Mac / Linux</span>
+source venv/bin/activate
+
+<span class="cm"># Your terminal will show: (venv) before the prompt</span></code></pre>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Install Django</div>
+        <pre><div class="code-header"><span class="code-lang">bash</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code>pip install django
+
+<span class="cm"># Verify</span>
+python -m django --version
+<span class="cm"># Output: 5.x.x</span></code></pre>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="step-title">Create your first project</div>
+        <pre><div class="code-header"><span class="code-lang">bash</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code>django-admin startproject myproject
+cd myproject
+python manage.py runserver</code></pre>
+        <div class="alert alert-tip">
+          <span class="alert-icon">✅</span>
+          <span>Visit <strong>http://127.0.0.1:8000</strong> in your browser. You should see the Django rocket launch page!</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <div class="step-title">Create an app</div>
+        <div class="step-desc">A Django project contains multiple apps. Each app handles one feature area.</div>
+        <pre><div class="code-header"><span class="code-lang">bash</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code>python manage.py startapp blog</code></pre>
+        <div class="step-desc">Then register it in <span class="ic">settings.py</span>:</div>
+        <pre><div class="code-header"><span class="code-lang">python</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code>INSTALLED_APPS = [
+    <span class="str">'django.contrib.admin'</span>,
+    <span class="str">'django.contrib.auth'</span>,
+    ...
+    <span class="str">'blog'</span>,  <span class="cm"># ← Add your app here</span>
+]</code></pre>
+      </div>
+    </div>
+
+    <h2>Recommended VS Code Setup</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Extension</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td>Python (Microsoft)</td><td>Syntax highlighting, linting, debugging</td></tr>
+          <tr><td>Django</td><td>Template tag autocomplete, syntax</td></tr>
+          <tr><td>SQLite Viewer</td><td>Browse your database in VS Code</td></tr>
+          <tr><td>GitLens</td><td>Git history, blame, compare</td></tr>
+          <tr><td>Prettier</td><td>Auto-format HTML, CSS, JS</td></tr>
+          <tr><td>Pylance</td><td>Type checking and IntelliSense</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="alert alert-warn">
+      <span class="alert-icon">⚠️</span>
+      <span><strong>Remember:</strong> Always activate your virtual environment before running Django commands. You should see <span class="ic">(venv)</span> in your terminal prompt.</span>
+    </div>
+  </div>
+  <div class="page-nav">
+    <button class="nav-btn" onclick="showPage(1)">← Introduction</button>
+    <button class="nav-btn next" onclick="showPage(3)">Project Structure →</button>
+  </div>
+</div>
+
+<!-- ===== PAGE 3: PROJECT STRUCTURE ===== -->
+<div class="page" id="page-3">
+  <div class="page-header">
+    <div class="chapter-tag">Chapter 03</div>
+    <h1>Django Project Structure</h1>
+    <p class="subtitle">Understanding every file in a Django project is your first real step. Let's decode it all.</p>
+  </div>
+  <div class="page-body">
+    <pre><div class="code-header"><span class="code-lang">file tree</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code>myproject/
+├── manage.py               <span class="cm"># CLI entry point for all Django commands</span>
+├── myproject/
+│   ├── __init__.py         <span class="cm"># Marks directory as a Python package</span>
+│   ├── settings.py         <span class="cm"># ALL configuration lives here</span>
+│   ├── urls.py             <span class="cm"># Root URL patterns (main router)</span>
+│   ├── wsgi.py             <span class="cm"># Entry point for WSGI web servers (prod)</span>
+│   └── asgi.py             <span class="cm"># Entry point for async/ASGI servers</span>
+└── blog/                   <span class="cm"># Your app</span>
+    ├── migrations/         <span class="cm"># Auto-generated DB schema changes</span>
+    │   └── 0001_initial.py
+    ├── templates/          <span class="cm"># HTML template files (recommended)</span>
+    ├── static/             <span class="cm"># CSS, JS, images for this app</span>
+    ├── __init__.py
+    ├── admin.py            <span class="cm"># Register models with admin panel</span>
+    ├── apps.py             <span class="cm"># App configuration class</span>
+    ├── models.py           <span class="cm"># Database models (tables)</span>
+    ├── views.py            <span class="cm"># Business logic — handles requests</span>
+    ├── urls.py             <span class="cm"># App-level URL patterns</span>
+    ├── forms.py            <span class="cm"># Form classes (you create this)</span>
+    ├── serializers.py      <span class="cm"># DRF serializers (you create this)</span>
+    └── tests.py            <span class="cm"># Unit and integration tests</span></code></pre>
+
+    <h2>Key files explained</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>File</th><th>What it does</th><th>Analogy</th></tr></thead>
+        <tbody>
+          <tr><td><span class="ic">manage.py</span></td><td>Run server, migrations, create superuser, run tests</td><td>Remote control for your project</td></tr>
+          <tr><td><span class="ic">settings.py</span></td><td>Database, installed apps, static files, email, cache</td><td>App preferences/config panel</td></tr>
+          <tr><td><span class="ic">urls.py</span></td><td>Maps URL patterns to view functions</td><td>Post office — routes requests to the right place</td></tr>
+          <tr><td><span class="ic">models.py</span></td><td>Defines database tables as Python classes</td><td>Blueprint of your database structure</td></tr>
+          <tr><td><span class="ic">views.py</span></td><td>Handles incoming requests and returns responses</td><td>Kitchen — receives orders, prepares, serves</td></tr>
+          <tr><td><span class="ic">admin.py</span></td><td>Registers models to appear in the admin interface</td><td>Staff dashboard setup</td></tr>
+          <tr><td><span class="ic">migrations/</span></td><td>Tracks database schema changes over time</td><td>Version control for your database</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Important manage.py commands</h2>
+    <pre><div class="code-header"><span class="code-lang">bash</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code><span class="cm"># Run development server</span>
+python manage.py runserver
+
+<span class="cm"># Create database migrations</span>
+python manage.py makemigrations
+
+<span class="cm"># Apply migrations to database</span>
+python manage.py migrate
+
+<span class="cm"># Create admin superuser</span>
+python manage.py createsuperuser
+
+<span class="cm"># Open Django shell (interactive Python)</span>
+python manage.py shell
+
+<span class="cm"># Run tests</span>
+python manage.py test
+
+<span class="cm"># Collect static files (for production)</span>
+python manage.py collectstatic</code></pre>
+
+    <div class="alert alert-info">
+      <span class="alert-icon">💡</span>
+      <span><strong>Best practice:</strong> Split each feature into its own app. For example: <span class="ic">blog</span>, <span class="ic">users</span>, <span class="ic">shop</span>, <span class="ic">orders</span>. This keeps your code organized and maintainable as the project grows.</span>
+    </div>
+  </div>
+  <div class="page-nav">
+    <button class="nav-btn" onclick="showPage(2)">← Setup</button>
+    <button class="nav-btn next" onclick="showPage(4)">URLs & Views →</button>
+  </div>
+</div>
+
+<!-- ===== PAGE 4: URLS & VIEWS ===== -->
+<div class="page" id="page-4">
+  <div class="page-header">
+    <div class="chapter-tag">Chapter 04</div>
+    <h1>URLs &amp; Views</h1>
+    <p class="subtitle">Every web request starts with a URL and ends with a View returning a response. Learn how Django routes traffic.</p>
+  </div>
+  <div class="page-body">
+    <h2>URL routing</h2>
+    <p>Django uses <span class="ic">urls.py</span> to match incoming URLs to Python functions (views). You include app URLs in the main project URLs file.</p>
+    <pre><div class="code-header"><span class="code-lang">python — myproject/urls.py (root)</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code><span class="kw">from</span> django.contrib <span class="kw">import</span> admin
+<span class="kw">from</span> django.urls <span class="kw">import</span> path, include
+
+urlpatterns = [
+    path(<span class="str">'admin/'</span>, admin.site.urls),
+    path(<span class="str">''</span>,        include(<span class="str">'blog.urls'</span>)),   <span class="cm"># homepage</span>
+    path(<span class="str">'api/'</span>,    include(<span class="str">'api.urls'</span>)),    <span class="cm"># API routes</span>
+    path(<span class="str">'users/'</span>,  include(<span class="str">'users.urls'</span>)),  <span class="cm"># auth routes</span>
+]</code></pre>
+    <pre><div class="code-header"><span class="code-lang">python — blog/urls.py (app)</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code><span class="kw">from</span> django.urls <span class="kw">import</span> path
+<span class="kw">from</span> . <span class="kw">import</span> views
+
+urlpatterns = [
+    path(<span class="str">''</span>,                    views.home,        name=<span class="str">'home'</span>),
+    path(<span class="str">'about/'</span>,               views.about,       name=<span class="str">'about'</span>),
+    path(<span class="str">'post/&lt;int:pk&gt;/'</span>,       views.post_detail, name=<span class="str">'post_detail'</span>),
+    path(<span class="str">'post/&lt;slug:slug&gt;/'</span>,    views.post_slug,   name=<span class="str">'post_slug'</span>),
+    path(<span class="str">'post/create/'</span>,         views.create_post, name=<span class="str">'create_post'</span>),
+]</code></pre>
+
+    <h2>URL converters</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Converter</th><th>Matches</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><span class="ic">&lt;int:pk&gt;</span></td><td>Integer</td><td><code>/post/42/</code></td></tr>
+          <tr><td><span class="ic">&lt;slug:slug&gt;</span></td><td>Slug string</td><td><code>/post/my-first-post/</code></td></tr>
+          <tr><td><span class="ic">&lt;str:name&gt;</span></td><td>Any string</td><td><code>/user/john/</code></td></tr>
+          <tr><td><span class="ic">&lt;uuid:id&gt;</span></td><td>UUID</td><td><code>/item/550e8400-.../ </code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Function-Based Views (FBV)</h2>
+    <pre><div class="code-header"><span class="code-lang">python — blog/views.py</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code><span class="kw">from</span> django.shortcuts <span class="kw">import</span> render, redirect, get_object_or_404
+<span class="kw">from</span> django.contrib.auth.decorators <span class="kw">import</span> login_required
+<span class="kw">from</span> .models <span class="kw">import</span> Post
+
+<span class="kw">def</span> <span class="fn">home</span>(request):
+    <span class="cm"># Get all published posts</span>
+    posts = Post.objects.filter(published=<span class="kw">True</span>).order_by(<span class="str">'-created_at'</span>)
+    <span class="kw">return</span> render(request, <span class="str">'blog/home.html'</span>, {<span class="str">'posts'</span>: posts})
+
+<span class="kw">def</span> <span class="fn">post_detail</span>(request, pk):
+    <span class="cm"># Returns 404 if post doesn't exist</span>
+    post = get_object_or_404(Post, pk=pk, published=<span class="kw">True</span>)
+    <span class="kw">return</span> render(request, <span class="str">'blog/detail.html'</span>, {<span class="str">'post'</span>: post})
+
+@login_required  <span class="cm"># Only logged-in users can access this</span>
+<span class="kw">def</span> <span class="fn">create_post</span>(request):
+    <span class="kw">if</span> request.method == <span class="str">'POST'</span>:
+        <span class="cm"># Process form data</span>
+        <span class="kw">return</span> redirect(<span class="str">'home'</span>)
+    <span class="kw">return</span> render(request, <span class="str">'blog/create.html'</span>)</code></pre>
+
+    <h2>Returning different response types</h2>
+    <pre><div class="code-header"><span class="code-lang">python</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code><span class="kw">from</span> django.http <span class="kw">import</span> HttpResponse, JsonResponse
+<span class="kw">from</span> django.shortcuts <span class="kw">import</span> redirect
+
+<span class="cm"># Plain HTML</span>
+<span class="kw">return</span> HttpResponse(<span class="str">"&lt;h1&gt;Hello World&lt;/h1&gt;"</span>)
+
+<span class="cm"># Template with context</span>
+<span class="kw">return</span> render(request, <span class="str">'template.html'</span>, {<span class="str">'key'</span>: value})
+
+<span class="cm"># JSON response (for APIs)</span>
+<span class="kw">return</span> JsonResponse({<span class="str">'status'</span>: <span class="str">'ok'</span>, <span class="str">'data'</span>: [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>]})
+
+<span class="cm"># Redirect to another URL</span>
+<span class="kw">return</span> redirect(<span class="str">'home'</span>)              <span class="cm"># by name</span>
+<span class="kw">return</span> redirect(<span class="str">'/some/path/'</span>)       <span class="cm"># by path</span>
+<span class="kw">return</span> redirect(<span class="str">'post_detail'</span>, pk=<span class="num">5</span>) <span class="cm"># with args</span></code></pre>
+  </div>
+  <div class="page-nav">
+    <button class="nav-btn" onclick="showPage(3)">← Structure</button>
+    <button class="nav-btn next" onclick="showPage(5)">Models & ORM →</button>
+  </div>
+</div>
+
+<!-- ===== PAGE 5: MODELS ===== -->
+<div class="page" id="page-5">
+  <div class="page-header">
+    <div class="chapter-tag">Chapter 05</div>
+    <h1>Models &amp; ORM</h1>
+    <p class="subtitle">Models are Python classes that map directly to database tables. Django's ORM lets you work with data using pure Python — no SQL required.</p>
+  </div>
+  <div class="page-body">
+    <h2>Defining models</h2>
+    <pre><div class="code-header"><span class="code-lang">python — blog/models.py</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code><span class="kw">from</span> django.db <span class="kw">import</span> models
+<span class="kw">from</span> django.contrib.auth.models <span class="kw">import</span> User
+<span class="kw">from</span> django.urls <span class="kw">import</span> reverse
+
+<span class="kw">class</span> <span class="cls">Category</span>(models.Model):
+    name = models.CharField(max_length=<span class="num">100</span>)
+    slug = models.SlugField(unique=<span class="kw">True</span>)
+
+    <span class="kw">def</span> <span class="fn">__str__</span>(self):
+        <span class="kw">return</span> self.name
+
+<span class="kw">class</span> <span class="cls">Tag</span>(models.Model):
+    name = models.CharField(max_length=<span class="num">50</span>)
+
+<span class="kw">class</span> <span class="cls">Post</span>(models.Model):
+    title      = models.CharField(max_length=<span class="num">200</span>)
+    slug       = models.SlugField(unique=<span class="kw">True</span>)
+    body       = models.TextField()
+    author     = models.ForeignKey(User, on_delete=models.CASCADE,
+                                   related_name=<span class="str">'posts'</span>)
+    category   = models.ForeignKey(Category, on_delete=models.SET_NULL,
+                                   null=<span class="kw">True</span>, blank=<span class="kw">True</span>)
+    tags       = models.ManyToManyField(Tag, blank=<span class="kw">True</span>)
+    image      = models.ImageField(upload_to=<span class="str">'posts/'</span>, blank=<span class="kw">True</span>)
+    published  = models.BooleanField(default=<span class="kw">False</span>)
+    created_at = models.DateTimeField(auto_now_add=<span class="kw">True</span>)
+    updated_at = models.DateTimeField(auto_now=<span class="kw">True</span>)
+    views      = models.PositiveIntegerField(default=<span class="num">0</span>)
+
+    <span class="kw">class</span> <span class="cls">Meta</span>:
+        ordering = [<span class="str">'-created_at'</span>]
+        verbose_name_plural = <span class="str">'posts'</span>
+
+    <span class="kw">def</span> <span class="fn">__str__</span>(self):
+        <span class="kw">return</span> self.title
+
+    <span class="kw">def</span> <span class="fn">get_absolute_url</span>(self):
+        <span class="kw">return</span> reverse(<span class="str">'post_detail'</span>, args=[self.slug])</code></pre>
+
+    <h2>Model field types</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Field</th><th>Use case</th></tr></thead>
+        <tbody>
+          <tr><td><span class="ic">CharField</span></td><td>Short text, requires <code>max_length</code></td></tr>
+          <tr><td><span class="ic">TextField</span></td><td>Long text, no length limit</td></tr>
+          <tr><td><span class="ic">IntegerField</span></td><td>Whole numbers</td></tr>
+          <tr><td><span class="ic">DecimalField</span></td><td>Currency, prices (max_digits, decimal_places)</td></tr>
+          <tr><td><span class="ic">BooleanField</span></td><td>True / False</td></tr>
+          <tr><td><span class="ic">DateTimeField</span></td><td>Date + time, use auto_now_add/auto_now</td></tr>
+          <tr><td><span class="ic">ImageField</span></td><td>Image upload (requires Pillow)</td></tr>
+          <tr><td><span class="ic">SlugField</span></td><td>URL-friendly strings like <code>my-post-title</code></td></tr>
+          <tr><td><span class="ic">EmailField</span></td><td>Email with validation</td></tr>
+          <tr><td><span class="ic">JSONField</span></td><td>Store JSON data</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Relationships</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Type</th><th>Field</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td>One-to-Many</td><td><span class="ic">ForeignKey</span></td><td>Many posts → one author</td></tr>
+          <tr><td>One-to-One</td><td><span class="ic">OneToOneField</span></td><td>One user ↔ one profile</td></tr>
+          <tr><td>Many-to-Many</td><td><span class="ic">ManyToManyField</span></td><td>Post ↔ many tags</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>ORM — CRUD operations</h2>
+    <pre><div class="code-header"><span class="code-lang">python — Django shell</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code><span class="cm"># ---- CREATE ----</span>
+post = Post.objects.create(
+    title=<span class="str">'My First Post'</span>, body=<span class="str">'Hello Django!'</span>, author=user
+)
+
+<span class="cm"># ---- READ ----</span>
+Post.objects.all()                           <span class="cm"># All posts</span>
+Post.objects.filter(published=<span class="kw">True</span>)         <span class="cm"># Published only</span>
+Post.objects.filter(author__username=<span class="str">'ali'</span>) <span class="cm"># Filter by related field</span>
+Post.objects.get(pk=<span class="num">1</span>)                     <span class="cm"># Single — raises error if not found</span>
+Post.objects.first()                         <span class="cm"># First result</span>
+Post.objects.count()                         <span class="cm"># Count rows</span>
+
+<span class="cm"># ---- UPDATE ----</span>
+post = Post.objects.get(pk=<span class="num">1</span>)
+post.title = <span class="str">'Updated Title'</span>
+post.save()
+
+Post.objects.filter(published=<span class="kw">False</span>).update(published=<span class="kw">True</span>)  <span class="cm"># bulk update</span>
+
+<span class="cm"># ---- DELETE ----</span>
+post.delete()
+Post.objects.filter(published=<span class="kw">False</span>).delete()  <span class="cm"># bulk delete</span>
+
+<span class="cm"># ---- ADVANCED ----</span>
+Post.objects.filter(title__icontains=<span class="str">'django'</span>)    <span class="cm"># case-insensitive search</span>
+Post.objects.filter(created_at__year=<span class="num">2024</span>)         <span class="cm"># date filtering</span>
+Post.objects.select_related(<span class="str">'author'</span>).all()        <span class="cm"># avoids N+1 (FK)</span>
+Post.objects.prefetch_related(<span class="str">'tags'</span>).all()        <span class="cm"># avoids N+1 (M2M)</span>
+Post.objects.order_by(<span class="str">'title'</span>)                     <span class="cm"># ascending</span>
+Post.objects.order_by(<span class="str">'-created_at'</span>)               <span class="cm"># descending</span>
+Post.objects.values(<span class="str">'title'</span>, <span class="str">'author__username'</span>)   <span class="cm"># dict output</span></code></pre>
+
+    <div class="alert alert-warn">
+      <span class="alert-icon">⚠️</span>
+      <span><strong>Common mistake:</strong> Using <span class="ic">.get()</span> without a try/except. It raises <span class="ic">DoesNotExist</span> if nothing is found. Use <span class="ic">get_object_or_404()</span> in views instead — it returns a clean 404 page automatically.</span>
+    </div>
+  </div>
+  <div class="page-nav">
+    <button class="nav-btn" onclick="showPage(4)">← URLs & Views</button>
+    <button class="nav-btn next" onclick="showPage(6)">Templates →</button>
+  </div>
+</div>
+
+<!-- ===== PAGE 6: TEMPLATES ===== -->
+<div class="page" id="page-6">
+  <div class="page-header">
+    <div class="chapter-tag">Chapter 06</div>
+    <h1>Django Templates</h1>
+    <p class="subtitle">Templates are HTML files with Django Template Language (DTL) for displaying dynamic content. Learn template inheritance to avoid repetition.</p>
+  </div>
+  <div class="page-body">
+    <h2>Template folder setup</h2>
+    <pre><div class="code-header"><span class="code-lang">python — settings.py</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code>TEMPLATES = [{
+    <span class="str">'BACKEND'</span>: <span class="str">'django.template.backends.django.DjangoTemplates'</span>,
+    <span class="str">'DIRS'</span>: [BASE_DIR / <span class="str">'templates'</span>],  <span class="cm"># ← add this</span>
+    <span class="str">'APP_DIRS'</span>: <span class="kw">True</span>,
+    ...
+}]</code></pre>
+
+    <h2>Base template (the master layout)</h2>
+    <pre><div class="code-header"><span class="code-lang">html — templates/base.html</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;{% block title %}My Site{% endblock %}&lt;/title&gt;
+  {% load static %}
+  &lt;link rel="stylesheet" href="{% static 'css/main.css' %}"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;nav&gt;
+    &lt;a href="{% url 'home' %}"&gt;Home&lt;/a&gt;
+    {% if user.is_authenticated %}
+      &lt;a href="{% url 'logout' %}"&gt;Logout&lt;/a&gt;
+    {% else %}
+      &lt;a href="{% url 'login' %}"&gt;Login&lt;/a&gt;
+    {% endif %}
+  &lt;/nav&gt;
+
+  &lt;main&gt;
+    {% if messages %}
+      {% for message in messages %}
+        &lt;div class="alert alert-{{ message.tags }}"&gt;{{ message }}&lt;/div&gt;
+      {% endfor %}
+    {% endif %}
+
+    {% block content %}{% endblock %}
+  &lt;/main&gt;
+
+  {% block scripts %}{% endblock %}
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+    <h2>Child template</h2>
+    <pre><div class="code-header"><span class="code-lang">html — templates/blog/home.html</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code>{% extends 'base.html' %}
+
+{% block title %}Blog — {{ block.super }}{% endblock %}
+
+{% block content %}
+  &lt;h1&gt;Latest Posts&lt;/h1&gt;
+
+  {% for post in posts %}
+    &lt;article&gt;
+      &lt;h2&gt;&lt;a href="{{ post.get_absolute_url }}"&gt;{{ post.title }}&lt;/a&gt;&lt;/h2&gt;
+      &lt;p&gt;{{ post.created_at|date:"F j, Y" }} · {{ post.author.username }}&lt;/p&gt;
+      &lt;p&gt;{{ post.body|truncatewords:40 }}&lt;/p&gt;
+    &lt;/article&gt;
+  {% empty %}
+    &lt;p&gt;No posts published yet.&lt;/p&gt;
+  {% endfor %}
+
+  {% include 'partials/pagination.html' with page_obj=page_obj %}
+{% endblock %}</code></pre>
+
+    <h2>Template language reference</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Syntax</th><th>Purpose</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><span class="ic">{{ var }}</span></td><td>Output a variable</td><td><span class="ic">{{ user.username }}</span></td></tr>
+          <tr><td><span class="ic">{% tag %}</span></td><td>Logic / control flow</td><td><span class="ic">{% if %} {% for %}</span></td></tr>
+          <tr><td><span class="ic">{{ var|filter }}</span></td><td>Transform output</td><td><span class="ic">{{ text|upper }}</span></td></tr>
+          <tr><td><span class="ic">{# comment #}</span></td><td>Template comment (not rendered)</td><td><span class="ic">{# TODO: fix this #}</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Common filters</h2>
+    <pre><div class="code-header"><span class="code-lang">django template</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code>{{ post.title|upper }}               <span class="cm">{# UPPERCASE #}</span>
+{{ post.title|lower }}               <span class="cm">{# lowercase #}</span>
+{{ post.title|title }}               <span class="cm">{# Title Case #}</span>
+{{ post.body|truncatewords:50 }}     <span class="cm">{# First 50 words #}</span>
+{{ post.body|truncatechars:200 }}    <span class="cm">{# First 200 chars #}</span>
+{{ post.created_at|date:"M d, Y" }} <span class="cm">{# Aug 23, 2024 #}</span>
+{{ post.created_at|timesince }}      <span class="cm">{# "3 days ago" #}</span>
+{{ price|floatformat:2 }}            <span class="cm">{# 2 decimal places #}</span>
+{{ items|length }}                   <span class="cm">{# Count of items #}</span>
+{{ post.body|linebreaks }}           <span class="cm">{# Convert \n to &lt;br&gt; #}</span>
+{{ post.html_content|safe }}         <span class="cm">{# Render HTML (careful!) #}</span>
+{{ value|default:"N/A" }}           <span class="cm">{# Show if None/empty #}</span></code></pre>
+  </div>
+  <div class="page-nav">
+    <button class="nav-btn" onclick="showPage(5)">← Models</button>
+    <button class="nav-btn next" onclick="showPage(7)">Forms →</button>
+  </div>
+</div>
+
+<!-- ===== PAGE 7: FORMS ===== -->
+<div class="page" id="page-7">
+  <div class="page-header">
+    <div class="chapter-tag">Chapter 07</div>
+    <h1>Django Forms</h1>
+    <p class="subtitle">Forms handle user input safely — Django provides automatic CSRF protection, validation, and error messages.</p>
+  </div>
+  <div class="page-body">
+    <h2>ModelForm (the most common approach)</h2>
+    <pre><div class="code-header"><span class="code-lang">python — blog/forms.py</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code><span class="kw">from</span> django <span class="kw">import</span> forms
+<span class="kw">from</span> .models <span class="kw">import</span> Post
+
+<span class="kw">class</span> <span class="cls">PostForm</span>(forms.ModelForm):
+    <span class="kw">class</span> <span class="cls">Meta</span>:
+        model = Post
+        fields = [<span class="str">'title'</span>, <span class="str">'body'</span>, <span class="str">'category'</span>, <span class="str">'image'</span>]
+        widgets = {
+            <span class="str">'title'</span>: forms.TextInput(attrs={
+                <span class="str">'class'</span>: <span class="str">'form-control'</span>,
+                <span class="str">'placeholder'</span>: <span class="str">'Enter post title...'</span>,
+            }),
+            <span class="str">'body'</span>: forms.Textarea(attrs={
+                <span class="str">'rows'</span>: <span class="num">8</span>,
+                <span class="str">'class'</span>: <span class="str">'form-control'</span>,
+            }),
+        }
+
+    <span class="cm"># Custom field-level validation</span>
+    <span class="kw">def</span> <span class="fn">clean_title</span>(self):
+        title = self.cleaned_data[<span class="str">'title'</span>]
+        <span class="kw">if</span> len(title) &lt; <span class="num">5</span>:
+            <span class="kw">raise</span> forms.ValidationError(<span class="str">"Title must be at least 5 characters."</span>)
+        <span class="kw">return</span> title
+
+    <span class="cm"># Cross-field validation</span>
+    <span class="kw">def</span> <span class="fn">clean</span>(self):
+        cleaned_data = super().clean()
+        <span class="kw">return</span> cleaned_data</code></pre>
+
+    <h2>Handling forms in a view</h2>
+    <pre><div class="code-header"><span class="code-lang">python — blog/views.py</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code><span class="kw">from</span> django.contrib <span class="kw">import</span> messages
+<span class="kw">from</span> .forms <span class="kw">import</span> PostForm
+
+@login_required
+<span class="kw">def</span> <span class="fn">create_post</span>(request):
+    <span class="kw">if</span> request.method == <span class="str">'POST'</span>:
+        form = PostForm(request.POST, request.FILES)  <span class="cm"># FILES for uploads</span>
+        <span class="kw">if</span> form.is_valid():
+            post = form.save(commit=<span class="kw">False</span>)  <span class="cm"># don't save yet</span>
+            post.author = request.user        <span class="cm"># set author manually</span>
+            post.save()
+            form.save_m2m()                   <span class="cm"># save ManyToMany (tags)</span>
+            messages.success(request, <span class="str">'Post created!'</span>)
+            <span class="kw">return</span> redirect(<span class="str">'post_detail'</span>, pk=post.pk)
+    <span class="kw">else</span>:
+        form = PostForm()
+
+    <span class="kw">return</span> render(request, <span class="str">'blog/create.html'</span>, {<span class="str">'form'</span>: form})</code></pre>
+
+    <h2>Form in template</h2>
+    <pre><div class="code-header"><span class="code-lang">html</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code>&lt;form method="POST" enctype="multipart/form-data"&gt;
+  {% csrf_token %}
+
+  {% for field in form %}
+    &lt;div class="field-group"&gt;
+      {{ field.label_tag }}
+      {{ field }}
+      {% if field.errors %}
+        &lt;ul class="errors"&gt;
+          {% for error in field.errors %}
+            &lt;li&gt;{{ error }}&lt;/li&gt;
+          {% endfor %}
+        &lt;/ul&gt;
+      {% endif %}
+    &lt;/div&gt;
+  {% endfor %}
+
+  &lt;button type="submit"&gt;Save Post&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+
+    <div class="alert alert-danger">
+      <span class="alert-icon">🚫</span>
+      <span>Always include <span class="ic">{% csrf_token %}</span> in every POST form. Django will return a <strong>403 Forbidden</strong> error without it — this is a security feature, not a bug.</span>
+    </div>
+  </div>
+  <div class="page-nav">
+    <button class="nav-btn" onclick="showPage(6)">← Templates</button>
+    <button class="nav-btn next" onclick="showPage(8)">Authentication →</button>
+  </div>
+</div>
+
+<!-- ===== PAGE 8: AUTH ===== -->
+<div class="page" id="page-8">
+  <div class="page-header">
+    <div class="chapter-tag">Chapter 08</div>
+    <h1>Authentication System</h1>
+    <p class="subtitle">Django ships with a complete auth system. Add login, logout, and registration with minimal code.</p>
+  </div>
+  <div class="page-body">
+    <h2>Custom User model — do this first!</h2>
+    <div class="alert alert-warn">
+      <span class="alert-icon">⚠️</span>
+      <span>Set up a custom user model <strong>before your first migration</strong>. Changing it later is very difficult and breaks existing data.</span>
+    </div>
+    <pre><div class="code-header"><span class="code-lang">python — users/models.py</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code><span class="kw">from</span> django.contrib.auth.models <span class="kw">import</span> AbstractUser
+<span class="kw">from</span> django.db <span class="kw">import</span> models
+
+<span class="kw">class</span> <span class="cls">CustomUser</span>(AbstractUser):
+    bio    = models.TextField(blank=<span class="kw">True</span>)
+    avatar = models.ImageField(upload_to=<span class="str">'avatars/'</span>, blank=<span class="kw">True</span>)
+    website = models.URLField(blank=<span class="kw">True</span>)
+
+<span class="cm"># settings.py</span>
+AUTH_USER_MODEL = <span class="str">'users.CustomUser'</span></code></pre>
+
+    <h2>URLs for auth</h2>
+    <pre><div class="code-header"><span class="code-lang">python — users/urls.py</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code><span class="kw">from</span> django.urls <span class="kw">import</span> path
+<span class="kw">from</span> django.contrib.auth <span class="kw">import</span> views <span class="kw">as</span> auth_views
+<span class="kw">from</span> . <span class="kw">import</span> views
+
+urlpatterns = [
+    path(<span class="str">'login/'</span>,    auth_views.LoginView.as_view(
+                        template_name=<span class="str">'users/login.html'</span>),  name=<span class="str">'login'</span>),
+    path(<span class="str">'logout/'</span>,   auth_views.LogoutView.as_view(),         name=<span class="str">'logout'</span>),
+    path(<span class="str">'register/'</span>, views.register,                          name=<span class="str">'register'</span>),
+    path(<span class="str">'profile/'</span>,  views.profile,                           name=<span class="str">'profile'</span>),
+
+    <span class="cm"># Password reset flow (all built-in)</span>
+    path(<span class="str">'password-reset/'</span>, auth_views.PasswordResetView.as_view(), name=<span class="str">'password_reset'</span>),
+    path(<span class="str">'password-reset/done/'</span>, auth_views.PasswordResetDoneView.as_view(), name=<span class="str">'password_reset_done'</span>),
+]</code></pre>
+
+    <h2>Registration view</h2>
+    <pre><div class="code-header"><span class="code-lang">python — users/views.py</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code><span class="kw">from</span> django.contrib.auth <span class="kw">import</span> login, logout
+<span class="kw">from</span> django.contrib.auth.forms <span class="kw">import</span> UserCreationForm
+
+<span class="kw">def</span> <span class="fn">register</span>(request):
+    <span class="kw">if</span> request.user.is_authenticated:
+        <span class="kw">return</span> redirect(<span class="str">'home'</span>)
+
+    <span class="kw">if</span> request.method == <span class="str">'POST'</span>:
+        form = UserCreationForm(request.POST)
+        <span class="kw">if</span> form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, <span class="str">f'Welcome, {user.username}!'</span>)
+            <span class="kw">return</span> redirect(<span class="str">'home'</span>)
+    <span class="kw">else</span>:
+        form = UserCreationForm()
+    <span class="kw">return</span> render(request, <span class="str">'users/register.html'</span>, {<span class="str">'form'</span>: form})</code></pre>
+
+    <h2>Protecting views</h2>
+    <pre><div class="code-header"><span class="code-lang">python</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code><span class="kw">from</span> django.contrib.auth.decorators <span class="kw">import</span> login_required, permission_required
+<span class="kw">from</span> django.contrib.auth.mixins <span class="kw">import</span> LoginRequiredMixin
+
+<span class="cm"># For function-based views</span>
+@login_required
+<span class="kw">def</span> <span class="fn">dashboard</span>(request): ...
+
+@login_required(login_url=<span class="str">'/users/login/'</span>)
+<span class="kw">def</span> <span class="fn">secret_page</span>(request): ...
+
+@permission_required(<span class="str">'blog.add_post'</span>, raise_exception=<span class="kw">True</span>)
+<span class="kw">def</span> <span class="fn">create_post</span>(request): ...
+
+<span class="cm"># For class-based views</span>
+<span class="kw">class</span> <span class="cls">DashboardView</span>(LoginRequiredMixin, ListView):
+    login_url = <span class="str">'/users/login/'</span>
+    model = Post</code></pre>
+
+    <h2>In templates</h2>
+    <pre><div class="code-header"><span class="code-lang">html</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code>{% if user.is_authenticated %}
+  &lt;p&gt;Hello, {{ user.username }}!&lt;/p&gt;
+  &lt;a href="{% url 'logout' %}"&gt;Logout&lt;/a&gt;
+{% else %}
+  &lt;a href="{% url 'login' %}"&gt;Login&lt;/a&gt;
+  &lt;a href="{% url 'register' %}"&gt;Sign Up&lt;/a&gt;
+{% endif %}
+
+{% if user.is_staff %}
+  &lt;a href="/admin/"&gt;Admin&lt;/a&gt;
+{% endif %}</code></pre>
+  </div>
+  <div class="page-nav">
+    <button class="nav-btn" onclick="showPage(7)">← Forms</button>
+    <button class="nav-btn next" onclick="showPage(9)">Admin Panel →</button>
+  </div>
+</div>
+
+<!-- ===== PAGE 9: ADMIN ===== -->
+<div class="page" id="page-9">
+  <div class="page-header">
+    <div class="chapter-tag">Chapter 09</div>
+    <h1>Admin Panel</h1>
+    <p class="subtitle">Django's auto-generated admin panel gives you a full-featured management UI with zero extra code. One of Django's most-loved features.</p>
+  </div>
+  <div class="page-body">
+    <h2>Register models</h2>
+    <pre><div class="code-header"><span class="code-lang">python — blog/admin.py</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code><span class="kw">from</span> django.contrib <span class="kw">import</span> admin
+<span class="kw">from</span> .models <span class="kw">import</span> Post, Category, Tag
+
+<span class="dec">@admin.register</span>(Post)
+<span class="kw">class</span> <span class="cls">PostAdmin</span>(admin.ModelAdmin):
+    list_display   = [<span class="str">'title'</span>, <span class="str">'author'</span>, <span class="str">'category'</span>, <span class="str">'published'</span>, <span class="str">'created_at'</span>]
+    list_filter    = [<span class="str">'published'</span>, <span class="str">'category'</span>, <span class="str">'created_at'</span>]
+    search_fields  = [<span class="str">'title'</span>, <span class="str">'body'</span>]
+    prepopulated_fields = {<span class="str">'slug'</span>: (<span class="str">'title'</span>,)}
+    list_editable  = [<span class="str">'published'</span>]
+    date_hierarchy = <span class="str">'created_at'</span>
+    ordering       = [<span class="str">'-created_at'</span>]
+    readonly_fields = [<span class="str">'created_at'</span>, <span class="str">'updated_at'</span>]
+
+    fieldsets = (
+        (<span class="str">'Content'</span>,   {<span class="str">'fields'</span>: (<span class="str">'title'</span>, <span class="str">'slug'</span>, <span class="str">'body'</span>, <span class="str">'image'</span>)}),
+        (<span class="str">'Meta'</span>,      {<span class="str">'fields'</span>: (<span class="str">'author'</span>, <span class="str">'category'</span>, <span class="str">'tags'</span>)}),
+        (<span class="str">'Publish'</span>,   {<span class="str">'fields'</span>: (<span class="str">'published'</span>,)}),
+        (<span class="str">'Timestamps'</span>,{<span class="str">'fields'</span>: (<span class="str">'created_at'</span>, <span class="str">'updated_at'</span>), <span class="str">'classes'</span>: (<span class="str">'collapse'</span>,)}),
+    )
+
+admin.site.register(Category)
+admin.site.register(Tag)</code></pre>
+
+    <h2>Create superuser & access admin</h2>
+    <pre><div class="code-header"><span class="code-lang">bash</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code>python manage.py createsuperuser
+<span class="cm"># Enter username, email, password</span>
+
+python manage.py runserver
+<span class="cm"># Visit: http://127.0.0.1:8000/admin</span></code></pre>
+
+    <h2>Custom admin actions</h2>
+    <pre><div class="code-header"><span class="code-lang">python</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code><span class="dec">@admin.register</span>(Post)
+<span class="kw">class</span> <span class="cls">PostAdmin</span>(admin.ModelAdmin):
+    actions = [<span class="str">'make_published'</span>]
+
+    <span class="dec">@admin.action</span>(description=<span class="str">'Mark selected posts as published'</span>)
+    <span class="kw">def</span> <span class="fn">make_published</span>(self, request, queryset):
+        count = queryset.update(published=<span class="kw">True</span>)
+        self.message_user(request, <span class="str">f'{count} posts marked as published.'</span>)</code></pre>
+
+    <div class="alert alert-tip">
+      <span class="alert-icon">✅</span>
+      <span>Install <span class="ic">django-jazzmin</span> (<code>pip install django-jazzmin</code>) for a beautiful modern admin theme with zero configuration.</span>
+    </div>
+  </div>
+  <div class="page-nav">
+    <button class="nav-btn" onclick="showPage(8)">← Auth</button>
+    <button class="nav-btn next" onclick="showPage(10)">REST Framework →</button>
+  </div>
+</div>
+
+<!-- ===== PAGE 10: DRF ===== -->
+<div class="page" id="page-10">
+  <div class="page-header">
+    <div class="chapter-tag">Chapter 10</div>
+    <h1>Django REST Framework</h1>
+    <p class="subtitle">Build powerful JSON APIs consumed by React, mobile apps, or third-party services. DRF is the standard way to build APIs with Django.</p>
+  </div>
+  <div class="page-body">
+    <h2>Installation & configuration</h2>
+    <pre><div class="code-header"><span class="code-lang">bash</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code>pip install djangorestframework djangorestframework-simplejwt</code></pre>
+    <pre><div class="code-header"><span class="code-lang">python — settings.py</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code>INSTALLED_APPS = [..., <span class="str">'rest_framework'</span>]
+
+REST_FRAMEWORK = {
+    <span class="str">'DEFAULT_AUTHENTICATION_CLASSES'</span>: [
+        <span class="str">'rest_framework_simplejwt.authentication.JWTAuthentication'</span>,
+    ],
+    <span class="str">'DEFAULT_PERMISSION_CLASSES'</span>: [
+        <span class="str">'rest_framework.permissions.IsAuthenticatedOrReadOnly'</span>,
+    ],
+    <span class="str">'DEFAULT_PAGINATION_CLASS'</span>: <span class="str">'rest_framework.pagination.PageNumberPagination'</span>,
+    <span class="str">'PAGE_SIZE'</span>: <span class="num">20</span>,
+}</code></pre>
+
+    <h2>Serializer</h2>
+    <pre><div class="code-header"><span class="code-lang">python — blog/serializers.py</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code><span class="kw">from</span> rest_framework <span class="kw">import</span> serializers
+<span class="kw">from</span> .models <span class="kw">import</span> Post
+
+<span class="kw">class</span> <span class="cls">PostSerializer</span>(serializers.ModelSerializer):
+    author_name = serializers.CharField(
+        source=<span class="str">'author.username'</span>, read_only=<span class="kw">True</span>
+    )
+    url = serializers.HyperlinkedIdentityField(
+        view_name=<span class="str">'post-detail'</span>
+    )
+
+    <span class="kw">class</span> <span class="cls">Meta</span>:
+        model = Post
+        fields = [<span class="str">'id'</span>, <span class="str">'url'</span>, <span class="str">'title'</span>, <span class="str">'body'</span>,
+                  <span class="str">'author_name'</span>, <span class="str">'created_at'</span>, <span class="str">'published'</span>]
+        read_only_fields = [<span class="str">'id'</span>, <span class="str">'created_at'</span>]</code></pre>
+
+    <h2>ViewSet (full CRUD in ~12 lines)</h2>
+    <pre><div class="code-header"><span class="code-lang">python — blog/views.py</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code><span class="kw">from</span> rest_framework.viewsets <span class="kw">import</span> ModelViewSet
+<span class="kw">from</span> rest_framework.permissions <span class="kw">import</span> IsAuthenticatedOrReadOnly
+<span class="kw">from</span> rest_framework.decorators <span class="kw">import</span> action
+<span class="kw">from</span> rest_framework.response <span class="kw">import</span> Response
+
+<span class="kw">class</span> <span class="cls">PostViewSet</span>(ModelViewSet):
+    queryset = Post.objects.filter(published=<span class="kw">True</span>)
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    <span class="kw">def</span> <span class="fn">perform_create</span>(self, serializer):
+        serializer.save(author=self.request.user)
+
+    <span class="dec">@action</span>(detail=<span class="kw">True</span>, methods=[<span class="str">'post'</span>])
+    <span class="kw">def</span> <span class="fn">publish</span>(self, request, pk=<span class="kw">None</span>):
+        post = self.get_object()
+        post.published = <span class="kw">True</span>
+        post.save()
+        <span class="kw">return</span> Response({<span class="str">'status'</span>: <span class="str">'published'</span>})</code></pre>
+
+    <h2>Router — auto-generates all URLs</h2>
+    <pre><div class="code-header"><span class="code-lang">python — blog/urls.py</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code><span class="kw">from</span> rest_framework.routers <span class="kw">import</span> DefaultRouter
+<span class="kw">from</span> .views <span class="kw">import</span> PostViewSet
+
+router = DefaultRouter()
+router.register(<span class="str">'posts'</span>, PostViewSet, basename=<span class="str">'post'</span>)
+urlpatterns = router.urls
+
+<span class="cm"># Auto-generates:
+# GET    /api/posts/       → list all posts
+# POST   /api/posts/       → create a post
+# GET    /api/posts/{id}/  → get one post
+# PUT    /api/posts/{id}/  → update a post (full)
+# PATCH  /api/posts/{id}/  → update a post (partial)
+# DELETE /api/posts/{id}/  → delete a post
+# POST   /api/posts/{id}/publish/ → custom action</span></code></pre>
+
+    <h2>JWT Authentication setup</h2>
+    <pre><div class="code-header"><span class="code-lang">python — urls.py</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code><span class="kw">from</span> rest_framework_simplejwt.views <span class="kw">import</span> (
+    TokenObtainPairView, TokenRefreshView
+)
+
+urlpatterns += [
+    path(<span class="str">'api/token/'</span>,         TokenObtainPairView.as_view()),
+    path(<span class="str">'api/token/refresh/'</span>,  TokenRefreshView.as_view()),
+]
+
+<span class="cm"># POST /api/token/ with {username, password}
+# Returns: {access: "...", refresh: "..."}
+# Use: Authorization: Bearer &lt;access_token&gt;</span></code></pre>
+  </div>
+  <div class="page-nav">
+    <button class="nav-btn" onclick="showPage(9)">← Admin</button>
+    <button class="nav-btn next" onclick="showPage(11)">Advanced Topics →</button>
+  </div>
+</div>
+
+<!-- ===== PAGE 11: ADVANCED ===== -->
+<div class="page" id="page-11">
+  <div class="page-header">
+    <div class="chapter-tag">Chapter 11</div>
+    <h1>Advanced Topics</h1>
+    <p class="subtitle">Class-based views, signals, async support, caching, pagination and more.</p>
+  </div>
+  <div class="page-body">
+    <h2>Class-Based Views (CBV)</h2>
+    <pre><div class="code-header"><span class="code-lang">python</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code><span class="kw">from</span> django.views.generic <span class="kw">import</span> (
+    ListView, DetailView, CreateView, UpdateView, DeleteView
+)
+<span class="kw">from</span> django.urls <span class="kw">import</span> reverse_lazy
+
+<span class="kw">class</span> <span class="cls">PostListView</span>(ListView):
+    model = Post
+    template_name = <span class="str">'blog/home.html'</span>
+    context_object_name = <span class="str">'posts'</span>
+    paginate_by = <span class="num">10</span>
+
+    <span class="kw">def</span> <span class="fn">get_queryset</span>(self):
+        <span class="kw">return</span> Post.objects.filter(published=<span class="kw">True</span>)
+
+<span class="kw">class</span> <span class="cls">PostCreateView</span>(LoginRequiredMixin, CreateView):
+    model = Post
+    form_class = PostForm
+    success_url = reverse_lazy(<span class="str">'home'</span>)
+
+    <span class="kw">def</span> <span class="fn">form_valid</span>(self, form):
+        form.instance.author = self.request.user
+        <span class="kw">return</span> super().form_valid(form)</code></pre>
+
+    <h2>Signals</h2>
+    <pre><div class="code-header"><span class="code-lang">python — users/signals.py</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code><span class="kw">from</span> django.db.models.signals <span class="kw">import</span> post_save
+<span class="kw">from</span> django.dispatch <span class="kw">import</span> receiver
+<span class="kw">from</span> django.contrib.auth <span class="kw">import</span> get_user_model
+
+User = get_user_model()
+
+<span class="dec">@receiver</span>(post_save, sender=User)
+<span class="kw">def</span> <span class="fn">create_profile</span>(sender, instance, created, **kwargs):
+    <span class="kw">if</span> created:
+        Profile.objects.create(user=instance)
+        <span class="cm"># Send welcome email</span>
+        send_welcome_email.delay(instance.email)  <span class="cm"># if using Celery</span></code></pre>
+
+    <h2>Async views (Django 4.1+)</h2>
+    <pre><div class="code-header"><span class="code-lang">python</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code><span class="kw">import</span> asyncio, httpx
+<span class="kw">from</span> django.http <span class="kw">import</span> JsonResponse
+
+<span class="kw">async def</span> <span class="fn">weather_view</span>(request, city):
+    <span class="kw">async with</span> httpx.AsyncClient() <span class="kw">as</span> client:
+        response = <span class="kw">await</span> client.get(
+            <span class="str">f'https://api.openweathermap.org/data/2.5/weather?q={city}'</span>
+        )
+    <span class="kw">return</span> JsonResponse(response.json())</code></pre>
+
+    <h2>Pagination</h2>
+    <pre><div class="code-header"><span class="code-lang">python</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code><span class="kw">from</span> django.core.paginator <span class="kw">import</span> Paginator
+
+<span class="kw">def</span> <span class="fn">post_list</span>(request):
+    all_posts = Post.objects.filter(published=<span class="kw">True</span>)
+    paginator = Paginator(all_posts, <span class="num">10</span>)
+    page_num  = request.GET.get(<span class="str">'page'</span>, <span class="num">1</span>)
+    page_obj  = paginator.get_page(page_num)
+    <span class="kw">return</span> render(request, <span class="str">'blog/list.html'</span>, {<span class="str">'page_obj'</span>: page_obj})</code></pre>
+
+    <h2>Redis caching</h2>
+    <pre><div class="code-header"><span class="code-lang">python</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code><span class="kw">from</span> django.views.decorators.cache <span class="kw">import</span> cache_page
+<span class="kw">from</span> django.core.cache <span class="kw">import</span> cache
+
+<span class="dec">@cache_page</span>(<span class="num">60</span> * <span class="num">15</span>)  <span class="cm"># Cache for 15 minutes</span>
+<span class="kw">def</span> <span class="fn">home</span>(request): ...
+
+<span class="cm"># Manual cache</span>
+posts = cache.get(<span class="str">'popular_posts'</span>)
+<span class="kw">if not</span> posts:
+    posts = Post.objects.order_by(<span class="str">'-views'</span>)[:<span class="num">10</span>]
+    cache.set(<span class="str">'popular_posts'</span>, posts, <span class="num">300</span>)</code></pre>
+  </div>
+  <div class="page-nav">
+    <button class="nav-btn" onclick="showPage(10)">← DRF</button>
+    <button class="nav-btn next" onclick="showPage(12)">Security →</button>
+  </div>
+</div>
+
+<!-- ===== PAGE 12: SECURITY ===== -->
+<div class="page" id="page-12">
+  <div class="page-header">
+    <div class="chapter-tag">Chapter 12</div>
+    <h1>Security Best Practices</h1>
+    <p class="subtitle">Django is secure by default — but you must configure it correctly for production. Here's everything you need to know.</p>
+  </div>
+  <div class="page-body">
+    <h2>Production settings checklist</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Setting</th><th>Value</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td><span class="ic">DEBUG</span></td><td><code>False</code></td><td>Never expose tracebacks in production</td></tr>
+          <tr><td><span class="ic">SECRET_KEY</span></td><td>From env var</td><td>Never hardcode — rotate if leaked</td></tr>
+          <tr><td><span class="ic">ALLOWED_HOSTS</span></td><td><code>['yourdomain.com']</code></td><td>Prevents HTTP host header attacks</td></tr>
+          <tr><td><span class="ic">SECURE_SSL_REDIRECT</span></td><td><code>True</code></td><td>Force all traffic to HTTPS</td></tr>
+          <tr><td><span class="ic">SESSION_COOKIE_SECURE</span></td><td><code>True</code></td><td>Session cookies only over HTTPS</td></tr>
+          <tr><td><span class="ic">CSRF_COOKIE_SECURE</span></td><td><code>True</code></td><td>CSRF cookies only over HTTPS</td></tr>
+          <tr><td><span class="ic">X_FRAME_OPTIONS</span></td><td><code>'DENY'</code></td><td>Prevent clickjacking attacks</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Environment variables</h2>
+    <pre><div class="code-header"><span class="code-lang">bash — .env file (NEVER commit this!)</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code>SECRET_KEY=django-insecure-&lt;your-random-key&gt;
+DEBUG=False
+DATABASE_URL=postgres://user:password@localhost:5432/mydb
+ALLOWED_HOSTS=yourdomain.com,www.yourdomain.com
+EMAIL_HOST_PASSWORD=your-smtp-password</code></pre>
+    <pre><div class="code-header"><span class="code-lang">python — settings.py</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code>pip install python-decouple
+
+<span class="kw">from</span> decouple <span class="kw">import</span> config
+
+SECRET_KEY    = config(<span class="str">'SECRET_KEY'</span>)
+DEBUG         = config(<span class="str">'DEBUG'</span>, cast=bool, default=<span class="kw">False</span>)
+ALLOWED_HOSTS = config(<span class="str">'ALLOWED_HOSTS'</span>).split(<span class="str">','</span>)</code></pre>
+
+    <pre><div class="code-header"><span class="code-lang">.gitignore — add these</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code>.env
+*.pyc
+__pycache__/
+venv/
+db.sqlite3
+media/
+staticfiles/
+.DS_Store</code></pre>
+
+    <h2>Django's built-in protections</h2>
+    <div class="card-grid">
+      <div class="card"><div class="card-icon">🛡️</div><div class="card-title">CSRF Protection</div><div class="card-desc">Auto-enabled — always use <span class="ic">{% csrf_token %}</span> in forms</div></div>
+      <div class="card"><div class="card-icon">🔒</div><div class="card-title">XSS Prevention</div><div class="card-desc">Template variables auto-escaped by default</div></div>
+      <div class="card"><div class="card-icon">🗃️</div><div class="card-title">SQL Injection</div><div class="card-desc">ORM parameterizes all queries automatically</div></div>
+      <div class="card"><div class="card-icon">🔑</div><div class="card-title">Password Hashing</div><div class="card-desc">PBKDF2+SHA256 by default, Argon2 available</div></div>
+    </div>
+
+    <div class="alert alert-danger">
+      <span class="alert-icon">🚫</span>
+      <span><strong>Never commit</strong> your <span class="ic">SECRET_KEY</span>, database passwords, or API keys to GitHub. If they're pushed, consider them compromised immediately — rotate them and scan your git history.</span>
+    </div>
+  </div>
+  <div class="page-nav">
+    <button class="nav-btn" onclick="showPage(11)">← Advanced</button>
+    <button class="nav-btn next" onclick="showPage(13)">Deployment →</button>
+  </div>
+</div>
+
+<!-- ===== PAGE 13: DEPLOYMENT ===== -->
+<div class="page" id="page-13">
+  <div class="page-header">
+    <div class="chapter-tag">Chapter 13</div>
+    <h1>Deployment</h1>
+    <p class="subtitle">Get your Django app live. We cover the easiest cloud platforms for beginners plus a Docker setup.</p>
+  </div>
+  <div class="page-body">
+    <h2>Pre-deployment setup</h2>
+    <pre><div class="code-header"><span class="code-lang">bash</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code>pip install gunicorn whitenoise psycopg2-binary dj-database-url python-decouple
+pip freeze > requirements.txt</code></pre>
+    <pre><div class="code-header"><span class="code-lang">python — settings.py additions</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code><span class="kw">import</span> dj_database_url
+
+<span class="cm"># Database — use DATABASE_URL env var</span>
+DATABASES = {
+    <span class="str">'default'</span>: dj_database_url.config(
+        default=config(<span class="str">'DATABASE_URL'</span>),
+        conn_max_age=<span class="num">600</span>
+    )
+}
+
+<span class="cm"># Static files — Whitenoise serves static in prod</span>
+MIDDLEWARE = [
+    <span class="str">'whitenoise.middleware.WhiteNoiseMiddleware'</span>,  <span class="cm"># ← add after SecurityMiddleware</span>
+    ...
+]
+STATICFILES_STORAGE = <span class="str">'whitenoise.storage.CompressedManifestStaticFilesStorage'</span>
+STATIC_ROOT = BASE_DIR / <span class="str">'staticfiles'</span></code></pre>
+    <pre><div class="code-header"><span class="code-lang">Procfile</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code>web: gunicorn myproject.wsgi --log-file -</code></pre>
+
+    <h2>Deploy on Railway (recommended for beginners)</h2>
+    <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Push to GitHub</div><div class="step-desc">Make sure <span class="ic">requirements.txt</span>, <span class="ic">Procfile</span>, and <span class="ic">.gitignore</span> are committed.</div></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Create project on Railway</div><div class="step-desc">Go to <strong>railway.app</strong> → New Project → Deploy from GitHub repo → select your repo.</div></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Add PostgreSQL</div><div class="step-desc">Click Add Service → Database → PostgreSQL. Railway auto-sets <span class="ic">DATABASE_URL</span>.</div></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">Set environment variables</div><div class="step-desc">In Variables tab: <span class="ic">SECRET_KEY</span>, <span class="ic">DEBUG=False</span>, <span class="ic">ALLOWED_HOSTS=*.railway.app</span></div></div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-body"><div class="step-title">Deploy & run migrations</div><div class="step-desc">Railway auto-deploys on every push. Run <span class="ic">python manage.py migrate</span> via the Railway shell.</div></div></div>
+
+    <h2>Docker setup</h2>
+    <pre><div class="code-header"><span class="code-lang">Dockerfile</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code>FROM python:3.11-slim
+
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+RUN python manage.py collectstatic --noinput
+
+EXPOSE 8000
+CMD gunicorn myproject.wsgi:application --bind 0.0.0.0:$PORT --workers 2</code></pre>
+
+    <div class="alert alert-info">
+      <span class="alert-icon">💡</span>
+      <span><strong>Other platforms:</strong> <strong>PythonAnywhere</strong> (free tier, beginner-friendly), <strong>Render</strong> (free tier + PostgreSQL), <strong>Fly.io</strong> (Docker-based), <strong>DigitalOcean App Platform</strong>.</span>
+    </div>
+  </div>
+  <div class="page-nav">
+    <button class="nav-btn" onclick="showPage(12)">← Security</button>
+    <button class="nav-btn next" onclick="showPage(14)">Testing →</button>
+  </div>
+</div>
+
+<!-- ===== PAGE 14: TESTING ===== -->
+<div class="page" id="page-14">
+  <div class="page-header">
+    <div class="chapter-tag">Chapter 14</div>
+    <h1>Testing</h1>
+    <p class="subtitle">Tested code is reliable code. Django makes testing easy with its built-in test framework.</p>
+  </div>
+  <div class="page-body">
+    <h2>Writing unit tests</h2>
+    <pre><div class="code-header"><span class="code-lang">python — blog/tests.py</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code><span class="kw">from</span> django.test <span class="kw">import</span> TestCase, Client
+<span class="kw">from</span> django.contrib.auth <span class="kw">import</span> get_user_model
+<span class="kw">from</span> django.urls <span class="kw">import</span> reverse
+<span class="kw">from</span> .models <span class="kw">import</span> Post
+
+User = get_user_model()
+
+<span class="kw">class</span> <span class="cls">PostModelTest</span>(TestCase):
+
+    <span class="kw">def</span> <span class="fn">setUp</span>(self):
+        self.user = User.objects.create_user(
+            username=<span class="str">'testuser'</span>, password=<span class="str">'testpass123'</span>
+        )
+        self.post = Post.objects.create(
+            title=<span class="str">'Test Post'</span>,
+            body=<span class="str">'Test content'</span>,
+            author=self.user,
+            published=<span class="kw">True</span>
+        )
+
+    <span class="kw">def</span> <span class="fn">test_post_str</span>(self):
+        self.assertEqual(str(self.post), <span class="str">'Test Post'</span>)
+
+    <span class="kw">def</span> <span class="fn">test_post_list_view</span>(self):
+        response = self.client.get(reverse(<span class="str">'home'</span>))
+        self.assertEqual(response.status_code, <span class="num">200</span>)
+        self.assertContains(response, <span class="str">'Test Post'</span>)
+        self.assertTemplateUsed(response, <span class="str">'blog/home.html'</span>)
+
+    <span class="kw">def</span> <span class="fn">test_create_post_requires_login</span>(self):
+        response = self.client.get(reverse(<span class="str">'create_post'</span>))
+        self.assertEqual(response.status_code, <span class="num">302</span>)  <span class="cm"># redirect to login</span>
+
+    <span class="kw">def</span> <span class="fn">test_create_post_logged_in</span>(self):
+        self.client.login(username=<span class="str">'testuser'</span>, password=<span class="str">'testpass123'</span>)
+        response = self.client.post(reverse(<span class="str">'create_post'</span>), {
+            <span class="str">'title'</span>: <span class="str">'New Post'</span>,
+            <span class="str">'body'</span>: <span class="str">'Some content here'</span>,
+        })
+        self.assertEqual(Post.objects.count(), <span class="num">2</span>)</code></pre>
+
+    <h2>Running tests</h2>
+    <pre><div class="code-header"><span class="code-lang">bash</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code><span class="cm"># Run all tests</span>
+python manage.py test
+
+<span class="cm"># Run tests for a specific app</span>
+python manage.py test blog
+
+<span class="cm"># Run tests with verbosity</span>
+python manage.py test --verbosity=2
+
+<span class="cm"># Run with coverage report</span>
+pip install coverage
+coverage run manage.py test
+coverage report</code></pre>
+
+    <div class="alert alert-tip">
+      <span class="alert-icon">✅</span>
+      <span><strong>Best practice:</strong> Aim for >80% test coverage. Write tests for all views (status codes, context, redirects), model methods, and form validation. Run tests before every deployment.</span>
+    </div>
+  </div>
+  <div class="page-nav">
+    <button class="nav-btn" onclick="showPage(13)">← Deployment</button>
+    <button class="nav-btn next" onclick="showPage(15)">Performance →</button>
+  </div>
+</div>
+
+<!-- ===== PAGE 15: PERFORMANCE ===== -->
+<div class="page" id="page-15">
+  <div class="page-header">
+    <div class="chapter-tag">Chapter 15</div>
+    <h1>Performance Optimization</h1>
+    <p class="subtitle">Make your Django app fast. The most common bottleneck is the database — these techniques will solve 90% of performance issues.</p>
+  </div>
+  <div class="page-body">
+    <h2>The N+1 query problem</h2>
+    <p>The most common Django performance issue. When you loop through objects and access a related field, Django makes <em>one query per object</em> — that's N+1 queries.</p>
+    <pre><div class="code-header"><span class="code-lang">python — bad vs good</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code><span class="cm"># ❌ BAD — 1 + N queries (N = number of posts)</span>
+posts = Post.objects.all()
+<span class="kw">for</span> post <span class="kw">in</span> posts:
+    print(post.author.username)  <span class="cm"># DB query each time!</span>
+
+<span class="cm"># ✅ GOOD — 2 queries total (JOIN)</span>
+posts = Post.objects.select_related(<span class="str">'author'</span>).all()
+<span class="kw">for</span> post <span class="kw">in</span> posts:
+    print(post.author.username)  <span class="cm"># No extra query</span>
+
+<span class="cm"># ✅ GOOD — M2M (prefetch in separate query)</span>
+posts = Post.objects.prefetch_related(<span class="str">'tags'</span>).all()</code></pre>
+
+    <h2>Query optimization techniques</h2>
+    <pre><div class="code-header"><span class="code-lang">python</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code><span class="cm"># Load only needed fields</span>
+Post.objects.values(<span class="str">'id'</span>, <span class="str">'title'</span>)
+Post.objects.only(<span class="str">'title'</span>, <span class="str">'created_at'</span>)
+Post.objects.defer(<span class="str">'body'</span>)  <span class="cm"># Skip large body field</span>
+
+<span class="cm"># Add database indexes</span>
+<span class="kw">class</span> <span class="cls">Post</span>(models.Model):
+    title = models.CharField(max_length=<span class="num">200</span>, db_index=<span class="kw">True</span>)
+    created_at = models.DateTimeField(auto_now_add=<span class="kw">True</span>, db_index=<span class="kw">True</span>)
+
+<span class="cm"># Aggregate without loading objects</span>
+<span class="kw">from</span> django.db.models <span class="kw">import</span> Count, Avg, Sum
+
+Post.objects.aggregate(total=Count(<span class="str">'id'</span>))
+Post.objects.values(<span class="str">'category'</span>).annotate(count=Count(<span class="str">'id'</span>))
+
+<span class="cm"># Efficient existence check</span>
+<span class="kw">if</span> Post.objects.filter(author=user).exists():  <span class="cm"># ✅ fast</span>
+    ...
+<span class="kw">if</span> Post.objects.filter(author=user).count() &gt; <span class="num">0</span>:  <span class="cm"># ❌ slower</span>
+    ...</code></pre>
+
+    <h2>Use Django Debug Toolbar</h2>
+    <pre><div class="code-header"><span class="code-lang">bash</span><div class="code-dots"><span></span><span></span><span></span></div><button class="copy-btn" onclick="copyCode(this)">copy</button></div><code>pip install django-debug-toolbar
+
+<span class="cm"># settings.py</span>
+INSTALLED_APPS += [<span class="str">'debug_toolbar'</span>]
+MIDDLEWARE += [<span class="str">'debug_toolbar.middleware.DebugToolbarMiddleware'</span>]
+INTERNAL_IPS = [<span class="str">'127.0.0.1'</span>]
+
+<span class="cm"># urls.py</span>
+<span class="kw">import</span> debug_toolbar
+urlpatterns = [path(<span class="str">'__debug__/'</span>, include(debug_toolbar.urls))] + urlpatterns</code></pre>
+
+    <div class="alert alert-tip">
+      <span class="alert-icon">✅</span>
+      <span>Django Debug Toolbar shows exactly how many queries each page makes, their SQL, and timing. It's the most valuable tool for optimizing Django performance.</span>
+    </div>
+  </div>
+  <div class="page-nav">
+    <button class="nav-btn" onclick="showPage(14)">← Testing</button>
+    <button class="nav-btn next" onclick="showPage(16)">Projects →</button>
+  </div>
+</div>
+
+<!-- ===== PAGE 16: PROJECTS ===== -->
+<div class="page" id="page-16">
+  <div class="page-header">
+    <div class="chapter-tag">Chapter 16</div>
+    <h1>Real-World Projects</h1>
+    <p class="subtitle">The best way to learn Django is to build. Here are five complete projects from beginner to advanced — each one teaches something new.</p>
+  </div>
+  <div class="page-body">
+
+    <div class="project-card" onclick="toggleProject('p1')">
+      <div class="project-icon">✅</div>
+      <div>
+        <span class="project-level level-bg">Beginner</span>
+        <div class="project-title">01 — Todo App</div>
+        <div class="project-desc">Build a full CRUD todo application with user authentication, task priorities, and Bootstrap UI.</div>
+        <div class="project-tags"><span class="project-tag">CRUD</span><span class="project-tag">Auth</span><span class="project-tag">Bootstrap</span><span class="project-tag">Forms</span></div>
+      </div>
+    </div>
+    <div id="p1" style="display:none;background:var(--bg3);border:1px solid var(--border);border-top:none;border-radius:0 0 12px 12px;padding:16px 20px;margin-bottom:12px">
+      <h3>Features</h3><p>Create/edit/delete todos, mark complete, set priority (low/medium/high), filter by status, user-specific todos, responsive UI.</p>
+      <h3>Key models</h3>
+      <pre><code><span class="kw">class</span> <span class="cls">Todo</span>(models.Model):
+    PRIORITY = [(1,<span class="str">'Low'</span>),(2,<span class="str">'Medium'</span>),(3,<span class="str">'High'</span>)]
+    user      = models.ForeignKey(User, on_delete=models.CASCADE)
+    title     = models.CharField(max_length=<span class="num">200</span>)
+    done      = models.BooleanField(default=<span class="kw">False</span>)
+    priority  = models.IntegerField(choices=PRIORITY, default=<span class="num">2</span>)
+    due_date  = models.DateField(null=<span class="kw">True</span>, blank=<span class="kw">True</span>)
+    created   = models.DateTimeField(auto_now_add=<span class="kw">True</span>)</code></pre>
+    </div>
+
+    <div class="project-card" onclick="toggleProject('p2')">
+      <div class="project-icon">📝</div>
+      <div>
+        <span class="project-level level-bg">Beginner+</span>
+        <div class="project-title">02 — Blog System</div>
+        <div class="project-desc">A full-featured blog with categories, tags, comments, rich text editor, pagination, and social sharing.</div>
+        <div class="project-tags"><span class="project-tag">Slug URLs</span><span class="project-tag">Pagination</span><span class="project-tag">Comments</span><span class="project-tag">CKEditor</span></div>
+      </div>
+    </div>
+    <div id="p2" style="display:none;background:var(--bg3);border:1px solid var(--border);border-top:none;border-radius:0 0 12px 12px;padding:16px 20px;margin-bottom:12px">
+      <h3>Features</h3><p>Post CRUD, draft/publish, categories, tags, nested comments, search, related posts, author profiles, RSS feed.</p>
+      <h3>New concepts you'll learn</h3><p>Slug fields, <span class="ic">get_absolute_url</span>, template tags, custom management commands, signals for notifications, sitemap generation.</p>
+    </div>
+
+    <div class="project-card" onclick="toggleProject('p3')">
+      <div class="project-icon">🏫</div>
+      <div>
+        <span class="project-level level-mid">Intermediate</span>
+        <div class="project-title">03 — School Management System</div>
+        <div class="project-desc">Manage students, teachers, classes, grades, attendance, and generate reports. Multi-role authentication.</div>
+        <div class="project-tags"><span class="project-tag">Roles</span><span class="project-tag">Reports</span><span class="project-tag">PDF export</span><span class="project-tag">Charts</span></div>
+      </div>
+    </div>
+    <div id="p3" style="display:none;background:var(--bg3);border:1px solid var(--border);border-top:none;border-radius:0 0 12px 12px;padding:16px 20px;margin-bottom:12px">
+      <h3>Features</h3><p>Student/Teacher/Admin roles, course enrollment, grade tracking, attendance marking, PDF report cards, dashboard with Chart.js analytics.</p>
+      <h3>New concepts</h3><p>Custom permissions, groups, proxy models, <span class="ic">django-crispy-forms</span>, <span class="ic">reportlab</span> for PDF generation, Chart.js integration.</p>
+    </div>
+
+    <div class="project-card" onclick="toggleProject('p4')">
+      <div class="project-icon">🛒</div>
+      <div>
+        <span class="project-level level-mid">Intermediate+</span>
+        <div class="project-title">04 — E-commerce Store</div>
+        <div class="project-desc">Full online store with products, cart, orders, Stripe payments, and an inventory management admin.</div>
+        <div class="project-tags"><span class="project-tag">Stripe</span><span class="project-tag">Cart</span><span class="project-tag">Sessions</span><span class="project-tag">Orders</span></div>
+      </div>
+    </div>
+    <div id="p4" style="display:none;background:var(--bg3);border:1px solid var(--border);border-top:none;border-radius:0 0 12px 12px;padding:16px 20px;margin-bottom:12px">
+      <h3>Features</h3><p>Product catalog, search/filter, session-based cart, Stripe checkout, order history, email receipts, stock management, coupon codes.</p>
+      <h3>New concepts</h3><p>Stripe webhooks, session storage, email with Celery/Redis, <span class="ic">django-storages</span> for S3 file uploads, background tasks.</p>
+    </div>
+
+    <div class="project-card" onclick="toggleProject('p5')">
+      <div class="project-icon">🤖</div>
+      <div>
+        <span class="project-level level-adv">Advanced</span>
+        <div class="project-title">05 — AI-Powered App</div>
+        <div class="project-desc">Django REST Framework backend + React frontend, integrating Claude/OpenAI API for intelligent features.</div>
+        <div class="project-tags"><span class="project-tag">DRF</span><span class="project-tag">React</span><span class="project-tag">JWT</span><span class="project-tag">Claude API</span><span class="project-tag">WebSocket</span></div>
+      </div>
+    </div>
+    <div id="p5" style="display:none;background:var(--bg3);border:1px solid var(--border);border-top:none;border-radius:0 0 12px 12px;padding:16px 20px;margin-bottom:12px">
+      <h3>Features</h3><p>DRF API backend, React SPA frontend, JWT auth, real-time chat via WebSockets (Django Channels), AI content generation, streaming responses.</p>
+      <h3>New concepts</h3><p>Django Channels, ASGI, <span class="ic">httpx</span> for async API calls, React + Axios, CORS headers, token refresh flow, streaming HTTP responses.</p>
+    </div>
+
+  </div>
+  <div class="page-nav">
+    <button class="nav-btn" onclick="showPage(15)">← Performance</button>
+    <button class="nav-btn next" onclick="showPage(17)">Interview Prep →</button>
+  </div>
+</div>
+
+<!-- ===== PAGE 17: INTERVIEW ===== -->
+<div class="page" id="page-17">
+  <div class="page-header">
+    <div class="chapter-tag">Chapter 17</div>
+    <h1>Interview Preparation</h1>
+    <p class="subtitle">Common Django interview questions with detailed answers. Click each question to reveal the answer.</p>
+  </div>
+  <div class="page-body">
+    <h2>Core Django</h2>
+
+    <div class="qa-item" onclick="toggleQA(this)">
+      <div class="qa-q">What is Django's MVT pattern? How is it different from MVC? <span class="arrow">▶</span></div>
+      <div class="qa-a">Django follows MVT: <strong>Model</strong> (data layer — ORM), <strong>View</strong> (business logic — handles requests, similar to MVC's Controller), and <strong>Template</strong> (presentation — renders HTML, similar to MVC's View). The difference is that in Django the framework itself acts as the Controller by routing URLs to Views.</div>
+    </div>
+
+    <div class="qa-item" onclick="toggleQA(this)">
+      <div class="qa-q">What is middleware in Django? Give examples. <span class="arrow">▶</span></div>
+      <div class="qa-a">Middleware is code that processes every request/response globally, before it reaches a view or after it leaves. Examples: <span class="ic">SecurityMiddleware</span> (HTTPS redirect), <span class="ic">SessionMiddleware</span> (sessions), <span class="ic">AuthenticationMiddleware</span> (attaches user to request), <span class="ic">CsrfViewMiddleware</span> (CSRF protection). Custom middleware can add headers, log requests, rate limit, etc.</div>
+    </div>
+
+    <div class="qa-item" onclick="toggleQA(this)">
+      <div class="qa-q">What is the difference between select_related and prefetch_related? <span class="arrow">▶</span></div>
+      <div class="qa-a"><span class="ic">select_related</span> uses a SQL JOIN — best for ForeignKey and OneToOne fields. It fetches everything in a single query. <span class="ic">prefetch_related</span> performs a separate query and joins in Python — best for ManyToMany and reverse ForeignKey relations. Use <span class="ic">select_related('author')</span> for a post's author, and <span class="ic">prefetch_related('tags')</span> for a post's tags.</div>
+    </div>
+
+    <div class="qa-item" onclick="toggleQA(this)">
+      <div class="qa-q">How does Django's ORM prevent SQL injection? <span class="arrow">▶</span></div>
+      <div class="qa-a">Django's ORM parameterizes all queries automatically. When you write <span class="ic">Post.objects.filter(title=user_input)</span>, Django passes <span class="ic">user_input</span> as a separate parameter to the database driver — it's never concatenated into the SQL string. The database handles escaping. Never use raw SQL with user input unless you use Django's <span class="ic">params</span> argument.</div>
+    </div>
+
+    <div class="qa-item" onclick="toggleQA(this)">
+      <div class="qa-q">When would you use signals? What are the risks? <span class="arrow">▶</span></div>
+      <div class="qa-a">Signals are good for: creating related objects on save (Profile on User create), sending notifications, updating cache. Risks: they make code harder to trace (action-at-a-distance), can cause infinite loops if you're not careful, and can slow things down if overused. Don't use signals for business-critical logic — use them for side effects that are truly decoupled.</div>
+    </div>
+
+    <div class="qa-item" onclick="toggleQA(this)">
+      <div class="qa-q">What's the difference between abstract and proxy models? <span class="arrow">▶</span></div>
+      <div class="qa-a"><strong>Abstract models</strong> have no database table — they exist only to share fields and methods between child models. <strong>Proxy models</strong> share the exact same database table as the parent but let you change Python behavior (custom methods, ordering, default manager). Use abstract for "template" models; use proxy to create different representations of the same data.</div>
+    </div>
+
+    <h2>DRF & API Questions</h2>
+
+    <div class="qa-item" onclick="toggleQA(this)">
+      <div class="qa-q">What is the difference between Serializer and ModelSerializer? <span class="arrow">▶</span></div>
+      <div class="qa-a"><span class="ic">ModelSerializer</span> auto-generates fields from a model — you just specify <span class="ic">model</span> and <span class="ic">fields</span>. It also auto-generates validators and handles create/update. <span class="ic">Serializer</span> requires manual field definition — more flexible but more code. Use <span class="ic">ModelSerializer</span> for standard CRUD APIs; use base <span class="ic">Serializer</span> for complex, non-model data structures.</div>
+    </div>
+
+    <div class="qa-item" onclick="toggleQA(this)">
+      <div class="qa-q">How does JWT authentication work in Django? <span class="arrow">▶</span></div>
+      <div class="qa-a">User logs in with credentials → server returns two tokens: <strong>access token</strong> (short-lived, 5-60 min) and <strong>refresh token</strong> (long-lived, days/weeks). Client stores both, sends access token in <span class="ic">Authorization: Bearer &lt;token&gt;</span> header on every request. When access token expires, client sends refresh token to get a new access token — no re-login needed. Server validates tokens by signature, no database lookup needed.</div>
+    </div>
+
+    <div class="qa-item" onclick="toggleQA(this)">
+      <div class="qa-q">How would you optimize a slow Django page? Walk through your process. <span class="arrow">▶</span></div>
+      <div class="qa-a">1) Install Django Debug Toolbar — identify the slow queries. 2) Fix N+1 queries with <span class="ic">select_related</span>/<span class="ic">prefetch_related</span>. 3) Add <span class="ic">db_index=True</span> on frequently filtered fields. 4) Use <span class="ic">.only()</span> or <span class="ic">.values()</span> to avoid loading unused fields. 5) Cache expensive queries with Redis (<span class="ic">cache.set</span>). 6) Cache full views with <span class="ic">@cache_page</span>. 7) Use <span class="ic">.exists()</span> instead of <span class="ic">.count() > 0</span>. 8) Paginate large result sets.</div>
+    </div>
+
+    <div class="alert alert-tip" style="margin-top:1.5rem">
+      <span class="alert-icon">✅</span>
+      <span><strong>Interview tip:</strong> Always explain the "why" behind your answer, not just the "what". For example, don't just say "use select_related" — explain that it avoids N+1 queries by using a SQL JOIN.</span>
+    </div>
+  </div>
+  <div class="page-nav">
+    <button class="nav-btn" onclick="showPage(16)">← Projects</button>
+    <button class="nav-btn next" onclick="showPage(0)">Back to Start ↑</button>
+  </div>
+</div>
+
+</main>
+</div>
+
+<!-- SEARCH DATA & SCRIPTS -->
+<script>
+const pages = [
+  {id:0,  ch:'00', title:'Welcome',             desc:'Overview, what you\'ll learn, prerequisites'},
+  {id:1,  ch:'01', title:'Introduction',         desc:'What is Django, MVT architecture, why use it'},
+  {id:2,  ch:'02', title:'Environment Setup',    desc:'Python, venv, pip install django, VS Code'},
+  {id:3,  ch:'03', title:'Project Structure',    desc:'manage.py, settings.py, urls.py, apps explained'},
+  {id:4,  ch:'04', title:'URLs & Views',         desc:'URL patterns, FBV, HttpResponse, redirect'},
+  {id:5,  ch:'05', title:'Models & ORM',         desc:'CharField, ForeignKey, CRUD, QuerySets, N+1'},
+  {id:6,  ch:'06', title:'Templates',            desc:'DTL, extends, include, filters, tags'},
+  {id:7,  ch:'07', title:'Forms',                desc:'ModelForm, is_valid, CSRF, validation, widgets'},
+  {id:8,  ch:'08', title:'Authentication',       desc:'Login, logout, register, login_required'},
+  {id:9,  ch:'09', title:'Admin Panel',          desc:'ModelAdmin, list_display, search, actions'},
+  {id:10, ch:'10', title:'REST Framework',       desc:'Serializer, ViewSet, Router, JWT, API'},
+  {id:11, ch:'11', title:'Advanced Topics',      desc:'CBV, signals, async views, caching, pagination'},
+  {id:12, ch:'12', title:'Security',             desc:'SECRET_KEY, CSRF, XSS, production settings'},
+  {id:13, ch:'13', title:'Deployment',           desc:'Gunicorn, Railway, Render, Docker, Whitenoise'},
+  {id:14, ch:'14', title:'Testing',              desc:'TestCase, Client, coverage, assertions'},
+  {id:15, ch:'15', title:'Performance',          desc:'select_related, prefetch_related, indexes, cache'},
+  {id:16, ch:'16', title:'Real Projects',        desc:'Todo, Blog, School, E-commerce, AI App'},
+  {id:17, ch:'17', title:'Interview Prep',       desc:'MVT, ORM, JWT, signals, optimization Q&A'},
+];
+
+let currentPage = 0;
+
+function showPage(i) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + i).classList.add('active');
+  document.querySelectorAll('.nav-item')[i].classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+  currentPage = i;
+  const pct = Math.round((i / (pages.length - 1)) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('main-progress').style.width = pct + '%';
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+function openSearch() {
+  document.getElementById('search-overlay').classList.add('open');
+  document.getElementById('search-input').value = '';
+  document.getElementById('search-input').focus();
+  renderSearchResults(pages);
+}
+
+function closeSearch(e) {
+  if (e.target.id === 'search-overlay') {
+    document.getElementById('search-overlay').classList.remove('open');
+  }
+}
+
+function doSearch(q) {
+  const results = q.trim() === '' ? pages : pages.filter(p =>
+    p.title.toLowerCase().includes(q.toLowerCase()) ||
+    p.desc.toLowerCase().includes(q.toLowerCase())
+  );
+  renderSearchResults(results);
+}
+
+function renderSearchResults(results) {
+  const el = document.getElementById('search-results');
+  el.innerHTML = results.slice(0, 8).map(p => `
+    <div class="search-result" onclick="selectSearch(${p.id})">
+      <span class="search-result-ch">${p.ch}</span>
+      <div>
+        <div class="search-result-title">${p.title}</div>
+        <div class="search-result-desc">${p.desc}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function selectSearch(i) {
+  document.getElementById('search-overlay').classList.remove('open');
+  showPage(i);
+}
+
+function searchKey(e) {
+  if (e.key === 'Escape') document.getElementById('search-overlay').classList.remove('open');
+  if (e.key === 'Enter') {
+    const first = document.querySelector('.search-result');
+    if (first) first.click();
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); openSearch(); }
+});
+
+function copyCode(btn) {
+  const code = btn.closest('pre').querySelector('code');
+  const text = code.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+function toggleQA(item) {
+  item.classList.toggle('open');
+}
+
+function toggleProject(id) {
+  const el = document.getElementById(id);
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+</script>
+</body>
+</html>
