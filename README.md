@@ -48,10 +48,7 @@ A modern, beginner-friendly, and open-source Django documentation website design
 ```bash
 Django-Docs/
 │── index.html
-│── css/
-│── js/
-│── assets/
-│── docs/
+│── LICENSE
 └── README.md
 ```
 
